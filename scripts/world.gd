@@ -71,32 +71,6 @@ class ChunkManager:
 			chunks[chunk_key] = chunk
 		return chunks[chunk_key]
 
-	#func wake_chunks_around(position: Vector2):
-		#var chunk_key = get_chunk_key(position)
-		#var current_chunk = chunks[chunk_key]
-		#if current_chunk.is_chunk_awake():
-			#for dx in [-1, 0, 1]:
-				#for dy in [-1, 0, 1]:
-					#if dx == 0 and dy == 0:
-						#continue  # Skip the current chunk
-#
-					#var neighbor_key = chunk_key + Vector2(dx, dy)
-					#if chunks.has(neighbor_key):
-						#var neighbor_chunk = chunks[neighbor_key]
-						#neighbor_chunk.set_awake(true)
-
-	#func wake_chunks_on_border(position: Vector2i):
-		#var chunk_key = get_chunk_key(position)
-		#if position.x % chunk_size == 0 and chunks.has(chunk_key + Vector2(-1, 0)):
-			#chunks[chunk_key + Vector2(-1, 0)].set_awake(true)
-		#if (position.x + 1) % chunk_size == 0 and chunks.has(chunk_key + Vector2(1, 0)):
-			#chunks[chunk_key + Vector2(1, 0)].set_awake(true)
-		#if position.y % chunk_size == 0 and chunks.has(chunk_key + Vector2(0, -1)):
-			#chunks[chunk_key + Vector2(0, -1)].set_awake(true)
-		#if (position.y + 1) % chunk_size == 0 and chunks.has(chunk_key + Vector2(0, 1)):
-			#chunks[chunk_key + Vector2(0, 1)].set_awake(true)
-
-
 func get_cells_in_chunk(chunk: Chunk) -> Array:
 	var chunk_cells = []
 	var chunk_top_left = chunk.get_top_left()
@@ -115,9 +89,10 @@ func _draw():
 		var chunk_top_left = chunk.get_top_left()
 		var chunk_size = chunk_manager.chunk_size
 		if chunk.is_chunk_awake():
-			draw_rect(Rect2(chunk_top_left, Vector2(chunk_size, chunk_size)), Color(0, 1, 0, 0.5))  # Green with transparency
+			draw_rect(Rect2(chunk_top_left, Vector2(chunk_size, chunk_size)), Color(0, 1, 0, 0.5))
 		else:
-			draw_rect(Rect2(chunk_top_left, Vector2(chunk_size, chunk_size)), Color(1, 0, 0, 0.5))  # Red with transparency
+			#draw_rect(Rect2(chunk_top_left, Vector2(chunk_size, chunk_size)), Color(1, 0, 0, 0.5))
+			pass
 
 
 func _process(_delta: float) -> void:
@@ -184,7 +159,6 @@ func swap_cell(cell: Vector2i, type: int, cell_direction: Vector2i, type_directi
 		wake_neighboring_chunks(cell)
 
 func wake_neighboring_chunks(position: Vector2i):
-	var chunk_key = chunk_manager.get_chunk_key(position)
 	if position.x % chunk_manager.chunk_size == 0:
 		var left_chunk = chunk_manager.get_or_create_chunk(position - Vector2i(1, 0))
 		left_chunk.set_awake(true)
@@ -245,5 +219,9 @@ func handle_water_movement(cell: Vector2i) -> void:
 		move_cell(cell, WATER, left_cell)
 
 	elif random_direction == 1 and right_cell_id == EMPTY and right_cell.y < simulation_bottom_bound:
-		move_cell(cell, WATER, right_cell)		
+		move_cell(cell, WATER, right_cell)
+	elif random_direction == 0 and right_cell_id == EMPTY and right_cell.y < simulation_bottom_bound:
+		move_cell(cell, WATER, right_cell)
+	elif random_direction == 1 and left_cell_id == EMPTY and left_cell.y < simulation_bottom_bound:
+		move_cell(cell, WATER, left_cell)
 		
