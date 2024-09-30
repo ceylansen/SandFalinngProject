@@ -5,11 +5,10 @@
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_332vr")
-brush = 1
 
 [node name="TileMapLayer" parent="." instance=ExtResource("2_wg8ty")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(114, 62)
+position = Vector2(113, 63)
 rotation = 0.0154741
 zoom = Vector2(5, 5)

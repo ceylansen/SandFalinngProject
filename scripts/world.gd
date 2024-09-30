@@ -11,8 +11,27 @@ const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
 
 var Brush = 0
 
-var simulation_top_bound : int = 0
-var simulation_bottom_bound : int = 100
+class TileElement:
+	var type : int
+	var movement_func: Callable
+	
+	func _init(t: int, move_func: Callable) -> void:
+		type = t
+		movement_func = move_func
+
+
+var elements = {
+	SAND: TileElement.new(SAND, handle_sand_movement),
+	WATER: TileElement.new(WATER, handle_water_movement),
+}
+
+
+const simulation_top_bound : int = 0
+const simulation_bottom_bound : int = 100
+const simulation_left_bound : int = 0
+const simulation_right_bound : int = 100
+
+
 
 func _process(delta: float) -> void:
 	var Used_cells = sim.get_used_cells()
@@ -26,14 +45,14 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("LeftMouse"):
 		for x in range(-brush, brush + 1):
 			for y in range(-brush, 0):
-				sim.set_cell(sim.local_to_map(Vector2i(get_global_mouse_position().x + x, get_global_mouse_position().y + y)), Brush, ATLAS_COORDS)
-
-
+				#sim.set_cell(sim.local_to_map(Vector2i(get_global_mouse_position().x + x, get_global_mouse_position().y + y)), Brush, ATLAS_COORDS)
+				sim.set_cell(sim.local_to_map(get_global_mouse_position()), Brush, ATLAS_COORDS)
 	for cell in Used_cells:
-		if sim.get_cell_source_id(cell) == SAND:
-			handle_sand_movement(cell)
-		elif sim.get_cell_source_id(cell) == WATER:
-			handle_water_movement(cell)
+		var element = elements.get(sim.get_cell_source_id(cell), null)
+		if element != null:
+			if element.movement_func != null:
+				element.movement_func.call(cell)
+
 
 func handle_sand_movement(cell: Vector2i) -> void:
 	var below_cell = cell + Vector2i(0, 1)
