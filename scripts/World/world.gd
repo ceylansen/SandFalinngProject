@@ -104,7 +104,7 @@ func _process(_delta: float) -> void:
 			for y in range(-brush_size, 0):
 				var pos = sim.local_to_map(Vector2i(get_global_mouse_position().x + x, get_global_mouse_position().y + y))
 				#var pos = sim.local_to_map(get_global_mouse_position())
-				#sim.set_cell(sim.local_to_map(Vector2i(get_global_mouse_position().x + x, get_global_mouse_position().y + y)), Brush, ATLAS_COORDS)
+#sim.set_cell(sim.local_to_map(Vector2i(get_global_mouse_position().x + x, get_global_mouse_position().y + y)), Brush, ATLAS_COORDS)
 				place_cell(pos, Brush)
 	
 	var pixels : Array = []
