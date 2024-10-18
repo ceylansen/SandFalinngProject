@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://dcjyvd7pggp7n"]
+[gd_scene load_steps=5 format=3 uid="uid://dcjyvd7pggp7n"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_cbd42"]
 [ext_resource type="Texture2D" uid="uid://bdmgptw7dwhe6" path="res://sprites/testman.png" id="2_3lhhy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fn84r"]
 size = Vector2(5, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qhh6b"]
+size = Vector2(5, 3)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -16,3 +19,11 @@ texture = ExtResource("2_3lhhy")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 0.5)
 shape = SubResource("RectangleShape2D_fn84r")
+
+[node name="StairStepArea" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StairStepArea"]
+position = Vector2(-0.5, 3.5)
+shape = SubResource("RectangleShape2D_qhh6b")
+debug_color = Color(0.972842, 0.0259822, 0.420163, 0.42)
