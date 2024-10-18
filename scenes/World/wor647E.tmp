@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=4 uid="uid://f7ahrxd8u8s2"]
+
+[ext_resource type="Script" path="res://scripts/world.gd" id="1_332vr"]
+[ext_resource type="PackedScene" uid="uid://my0u1f2wned0" path="res://scenes/World/tile_map_layer.tscn" id="2_wg8ty"]
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_332vr")
+brush_size = 3
+debug = true
+
+[node name="TileMapLayer" parent="." instance=ExtResource("2_wg8ty")]
+tile_map_data = PackedByteArray("AABLABUAAAAAAAAAAABYABYAAAAAAAAAAABnABUAAAAAAAAAAAB7ABcAAAAAAAAAAACPABUAAAAAAAAAAACcABYAAAAAAAAAAACrABsAAAAAAAAAAAA=")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(113, 63)
+rotation = 0.0154741
+zoom = Vector2(5, 5)
