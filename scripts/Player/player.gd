@@ -5,7 +5,7 @@ const JUMP_VELOCITY = -150.0
 
 var stair_step : bool = false
 var stepped : bool = false
-var step_wait : float = 0.05
+var step_wait : float = 0.04
 var first_step : bool = true
 var first_step_timeout : float = 0.1
 var too_high : bool = false

@@ -151,8 +151,7 @@ func place_cell(cell: Vector2i, type: int):
 	sim.set_cell(cell, type, ATLAS_COORDS)
 	chunk_manager.get_or_create_chunk(cell).set_awake(true)
 	chunk_manager.get_or_create_chunk(cell).set_awake(true)
-	if cell.x % chunk_manager.chunk_size == 0 or cell.y % chunk_manager.chunk_size == 0:
-		wake_neighboring_chunks(cell)
+	wake_neighboring_chunks(cell, cell)
 
 
 func move_cell(cell: Vector2i, type: int, cell_direction: Vector2i):
@@ -160,11 +159,11 @@ func move_cell(cell: Vector2i, type: int, cell_direction: Vector2i):
 	sim.set_cell(cell_direction, type, ATLAS_COORDS)
 	chunk_manager.get_or_create_chunk(cell).set_awake(true)
 	chunk_manager.get_or_create_chunk(cell_direction).set_awake(true)
-	if cell_direction.x % chunk_manager.chunk_size == 0 or cell_direction.y % chunk_manager.chunk_size == 0:
-		wake_neighboring_chunks(cell_direction)
+	#if cell_direction.x % chunk_manager.chunk_size == 0 or cell_direction.y % chunk_manager.chunk_size == 0:
+	wake_neighboring_chunks(cell_direction + (cell_direction - cell), cell)
 
-	if cell.x % chunk_manager.chunk_size == 0 or cell.y % chunk_manager.chunk_size == 0:
-		wake_neighboring_chunks(cell)
+	#if cell.x % chunk_manager.chunk_size == 0 or cell.y % chunk_manager.chunk_size == 0:
+		#wake_neighboring_chunks(cell)
 
 
 func swap_cell(cell: Vector2i, type: int, cell_direction: Vector2i, type_direction: int):
@@ -173,25 +172,27 @@ func swap_cell(cell: Vector2i, type: int, cell_direction: Vector2i, type_directi
 	chunk_manager.get_or_create_chunk(cell).set_awake(true)
 	chunk_manager.get_or_create_chunk(cell_direction).set_awake(true)
 	moved_cells[cell_direction] = null
-	if cell_direction.x % chunk_manager.chunk_size == 0 or cell_direction.y % chunk_manager.chunk_size == 0:
-		wake_neighboring_chunks(cell_direction)
-	if cell.x % chunk_manager.chunk_size == 0 or cell.y % chunk_manager.chunk_size == 0:
-		wake_neighboring_chunks(cell)
+	#if cell_direction.x % chunk_manager.chunk_size == 0 or cell_direction.y % chunk_manager.chunk_size == 0:
+	wake_neighboring_chunks(cell_direction + (cell_direction - cell), cell)
+	#if cell.x % chunk_manager.chunk_size == 0 or cell.y % chunk_manager.chunk_size == 0:
+		#wake_neighboring_chunks(cell)
 
 
-func wake_neighboring_chunks(position: Vector2i):
-	if position.x % chunk_manager.chunk_size == 0:
-		var left_chunk = chunk_manager.get_or_create_chunk(position - Vector2i(1, 0))
-		left_chunk.set_awake(true)
-	elif (position.x + 1) % chunk_manager.chunk_size == 0:
-		var right_chunk = chunk_manager.get_or_create_chunk(position + Vector2i(1, 0))
-		right_chunk.set_awake(true)
-	elif position.y % chunk_manager.chunk_size == 0:
-		var top_chunk = chunk_manager.get_or_create_chunk(position - Vector2i(0, 1))
+func wake_neighboring_chunks(position: Vector2i, originalpos: Vector2i):
+	#if position.x % chunk_manager.chunk_size == 0:
+		#var left_chunk = chunk_manager.get_or_create_chunk(position - Vector2i(1, 0))
+		#left_chunk.set_awake(true)
+	#elif (position.x + 1) % chunk_manager.chunk_size == 0:
+		#var right_chunk = chunk_manager.get_or_create_chunk(position + Vector2i(1, 0))
+		#right_chunk.set_awake(true)
+	if originalpos.y % chunk_manager.chunk_size == 0:
+		var top_chunk = chunk_manager.get_or_create_chunk(originalpos - Vector2i(0, 1))
 		top_chunk.set_awake(true)
-	elif (position.y + 1) % chunk_manager.chunk_size == 0:
-		var bottom_chunk = chunk_manager.get_or_create_chunk(position + Vector2i(0, 1))
-		bottom_chunk.set_awake(true)
+	#elif (position.y + 1) % chunk_manager.chunk_size == 0:
+		#var bottom_chunk = chunk_manager.get_or_create_chunk(position + Vector2i(0, 1))
+		#bottom_chunk.set_awake(true)
+	var neighbor_chunk = chunk_manager.get_or_create_chunk(position)
+	neighbor_chunk.set_awake(true)
 
 
 func handle_sand_movement(cell: Vector2i) -> void:
@@ -242,11 +243,17 @@ func handle_water_movement(cell: Vector2i) -> void:
 	var left_cell_id = sim.get_cell_source_id(left_cell)
 	var right_cell_id = sim.get_cell_source_id(right_cell)
 	var random_direction = randi() % 2
+	var disperse_rate: int = 3
 	if random_direction == 0 and left_cell_id == EMPTY and left_cell.y < simulation_bottom_bound:
-		move_cell(cell, WATER, left_cell)
-
+		for i in range(disperse_rate, 0, -1):
+			if sim.get_cell_source_id(cell + Vector2i(-i, 0)) == EMPTY:
+				move_cell(cell, WATER, cell + Vector2i(-i, 0))
+				return
 	elif random_direction == 1 and right_cell_id == EMPTY and right_cell.y < simulation_bottom_bound:
-		move_cell(cell, WATER, right_cell)
+		for i in range(disperse_rate, 0, -1):
+			if sim.get_cell_source_id(cell + Vector2i(i, 0)) == EMPTY:
+				move_cell(cell, WATER, cell + Vector2i(i, 0))
+				return
 	#elif random_direction == 0 and right_cell_id == EMPTY and right_cell.y < simulation_bottom_bound:
 		#move_cell(cell, WATER, right_cell)
 	#elif random_direction == 1 and left_cell_id == EMPTY and left_cell.y < simulation_bottom_bound:
