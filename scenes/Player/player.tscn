@@ -1,40 +1,77 @@
-[gd_scene load_steps=6 format=3 uid="uid://dcjyvd7pggp7n"]
+[gd_scene load_steps=11 format=3 uid="uid://dcjyvd7pggp7n"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_cbd42"]
-[ext_resource type="Texture2D" uid="uid://bdmgptw7dwhe6" path="res://sprites/testman.png" id="2_3lhhy"]
+[ext_resource type="Texture2D" uid="uid://bv1vsp80dgpu7" path="res://sprites/Newtestguy.png" id="2_xryyc"]
+[ext_resource type="Texture2D" uid="uid://b7a5e2mlxu2s3" path="res://sprites/runguy.png" id="3_yxr5e"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7hkyo"]
+atlas = ExtResource("2_xryyc")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g4twb"]
+atlas = ExtResource("3_yxr5e")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4emsn"]
+atlas = ExtResource("3_yxr5e")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_shv1l"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7hkyo")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g4twb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4emsn")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fn84r"]
-size = Vector2(4, 11)
+size = Vector2(4, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qhh6b"]
 size = Vector2(6, 2)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_moio0"]
-size = Vector2(6, 9)
+size = Vector2(6, 10)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_cbd42")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_3lhhy")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_shv1l")
+animation = &"walk"
+frame_progress = 0.895168
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-1, 0.5)
+position = Vector2(-1, 1)
 shape = SubResource("RectangleShape2D_fn84r")
 
 [node name="SingleStep" type="Area2D" parent="."]
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SingleStep"]
-position = Vector2(-1, 5)
+position = Vector2(-1, 6)
 shape = SubResource("RectangleShape2D_qhh6b")
 debug_color = Color(0.972842, 0.0259822, 0.420163, 0.42)
 
 [node name="TooHighStep" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TooHighStep"]
-position = Vector2(-1, -0.5)
+position = Vector2(-1, 0)
 shape = SubResource("RectangleShape2D_moio0")
 debug_color = Color(0.675674, 0.506211, 0, 0.42)
 

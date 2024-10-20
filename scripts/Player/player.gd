@@ -18,10 +18,11 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 	var direction := Input.get_axis("left", "right")
 	if direction == -1:
-		$Sprite2D.flip_h = true
+		$AnimatedSprite2D.flip_h = true
 	elif direction == 1:
-		$Sprite2D.flip_h = false
+		$AnimatedSprite2D.flip_h = false
 	if direction:
+		$AnimatedSprite2D.play("walk")
 		if stair_step:
 			#position += Vector2(direction, -1)
 			if not stepped and not too_high:
@@ -29,6 +30,7 @@ func _physics_process(delta: float) -> void:
 				step_logic(direction)
 		velocity.x = direction * SPEED
 	else:
+		$AnimatedSprite2D.play("idle")
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	move_and_slide()
 
