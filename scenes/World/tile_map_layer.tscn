@@ -14,6 +14,8 @@ texture_region_size = Vector2i(1, 1)
 texture = ExtResource("2_x7b15")
 texture_region_size = Vector2i(1, 1)
 0:0/0 = 0
+0:0/0/modulate = Color(1, 1, 1, 0.478431)
+0:0/0/z_index = 1
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fgvpp"]
 texture = ExtResource("3_nh1nf")
