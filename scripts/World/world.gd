@@ -205,10 +205,10 @@ func handle_sand_movement(cell: Vector2i) -> void:
 
 	var below_cell = cell + Vector2i(0, 1)
 	var below_cell_id = sim.get_cell_source_id(below_cell)
-	if below_cell_id == WATER and below_cell.y < simulation_bottom_bound:
+	if below_cell_id == WATER:
 		swap_cell(cell, SAND, below_cell, WATER)
 		return
-	if below_cell_id == EMPTY and below_cell.y < simulation_bottom_bound:
+	if below_cell_id == EMPTY:
 		move_cell(cell, SAND, below_cell)
 		return
 	var left_cell = cell + Vector2i(-1, 1)
@@ -235,7 +235,7 @@ func handle_water_movement(cell: Vector2i) -> void:
 
 	var below_cell = cell + Vector2i(0, 1)
 	var below_cell_id = sim.get_cell_source_id(below_cell)
-	if below_cell_id == EMPTY and below_cell.y < simulation_bottom_bound:
+	if below_cell_id == EMPTY:
 		move_cell(cell, WATER, below_cell)
 		return
 	var left_cell = cell + Vector2i(-1, 0)
@@ -244,12 +244,12 @@ func handle_water_movement(cell: Vector2i) -> void:
 	var right_cell_id = sim.get_cell_source_id(right_cell)
 	var random_direction = randi() % 2
 	var disperse_rate: int = 3
-	if random_direction == 0 and left_cell_id == EMPTY and left_cell.y < simulation_bottom_bound:
+	if random_direction == 0 and left_cell_id == EMPTY:
 		for i in range(disperse_rate, 0, -1):
 			if sim.get_cell_source_id(cell + Vector2i(-i, 0)) == EMPTY:
 				move_cell(cell, WATER, cell + Vector2i(-i, 0))
 				return
-	elif random_direction == 1 and right_cell_id == EMPTY and right_cell.y < simulation_bottom_bound:
+	elif random_direction == 1 and right_cell_id == EMPTY:
 		for i in range(disperse_rate, 0, -1):
 			if sim.get_cell_source_id(cell + Vector2i(i, 0)) == EMPTY:
 				move_cell(cell, WATER, cell + Vector2i(i, 0))
