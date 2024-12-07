@@ -77,5 +77,6 @@ up={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
-renderer/rendering_method="mobile"
-environment/defaults/default_clear_color=Color(0.220902, 0.226712, 0.483394, 1)
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.582879, 0.853196, 0.97773, 1)
