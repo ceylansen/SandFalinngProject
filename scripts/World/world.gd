@@ -1,17 +1,15 @@
 extends Node2D
 
 @onready var sim : TileMapLayer = $TileMapLayer
-@onready var camera : Camera2D = $Camera2D
 
 const EMPTY : int = -1
 const SAND : int = 0
 const WATER : int = 1
 const STONE : int = 2
+const DIRT : int = 3
+const DARK_DIRT : int = 4
+const GRASS : int = 5
 const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
-const simulation_top_bound : int = 0
-const simulation_bottom_bound : int = 100
-const simulation_left_bound : int = 0
-const simulation_right_bound : int = 100
 @onready var chunk_manager : ChunkManager = ChunkManager.new(16)
 
 @export var brush_size : int = 1
@@ -28,9 +26,12 @@ class TileElement:
 		movement_func = move_func
 
 var elements = {
-	SAND: TileElement.new(SAND, handle_sand_movement),
-	WATER: TileElement.new(WATER, handle_water_movement),
-	STONE: TileElement.new(STONE, handle_stone)
+	SAND: TileElement.new(SAND, handl_solid_movement),
+	WATER: TileElement.new(WATER, handle_liquid_movement),
+	STONE: TileElement.new(STONE, handle_immovable),
+	DIRT: TileElement.new(DIRT, handl_solid_movement),
+	DARK_DIRT: TileElement.new(DARK_DIRT, handl_solid_movement),
+	GRASS: TileElement.new(DARK_DIRT, handle_immovable)
 }
 
 
@@ -96,6 +97,8 @@ func _process(_delta: float) -> void:
 		Brush = WATER
 	elif Input.is_action_just_pressed("3"):
 		Brush = STONE
+	elif Input.is_action_just_pressed("4"):
+		Brush = DIRT
 	elif Input.is_action_just_pressed("erase"):
 		Brush = EMPTY
 	
@@ -117,9 +120,10 @@ func _process(_delta: float) -> void:
 				#var element = elements.get(chunk_cells[cell])
 				#if element != null and element.movement_func != null:
 					#element.movement_func.call(cell)
-				var element = elements.get(sim.get_cell_source_id(cell), null)
+				var type = sim.get_cell_source_id(cell)
+				var element = elements.get(type, null)
 				if element != null and element.movement_func != null:
-					element.movement_func.call(cell)
+					element.movement_func.call(cell, type)
 					moved_cells[cell] = null
 	#for cell in pixels:
 		#var element = elements.get(sim.get_cell_source_id(cell), null)
@@ -195,7 +199,7 @@ func wake_neighboring_chunks(position: Vector2i, originalpos: Vector2i):
 	neighbor_chunk.set_awake(true)
 
 
-func handle_sand_movement(cell: Vector2i) -> void:
+func handl_solid_movement(cell: Vector2i, type: int) -> void:
 	var current_chunk = chunk_manager.get_or_create_chunk(cell)
 	if not current_chunk.is_chunk_awake():
 		return
@@ -206,10 +210,10 @@ func handle_sand_movement(cell: Vector2i) -> void:
 	var below_cell = cell + Vector2i(0, 1)
 	var below_cell_id = sim.get_cell_source_id(below_cell)
 	if below_cell_id == WATER:
-		swap_cell(cell, SAND, below_cell, WATER)
+		swap_cell(cell, type, below_cell, WATER)
 		return
 	if below_cell_id == EMPTY:
-		move_cell(cell, SAND, below_cell)
+		move_cell(cell, type, below_cell)
 		return
 	var left_cell = cell + Vector2i(-1, 1)
 	var right_cell = cell + Vector2i(1, 1)
@@ -218,14 +222,14 @@ func handle_sand_movement(cell: Vector2i) -> void:
 
 	var random_direction = randi() % 2
 
-	if random_direction == 0 and left_cell_id == EMPTY and left_cell.y < simulation_bottom_bound:
-		move_cell(cell, SAND, left_cell)
+	if random_direction == 0 and left_cell_id == EMPTY:
+		move_cell(cell, type, left_cell)
 
-	elif random_direction == 1 and right_cell_id == EMPTY and right_cell.y < simulation_bottom_bound:
-		move_cell(cell, SAND, right_cell)
+	elif random_direction == 1 and right_cell_id == EMPTY:
+		move_cell(cell, type, right_cell)
 
 
-func handle_water_movement(cell: Vector2i) -> void:
+func handle_liquid_movement(cell: Vector2i, type: int) -> void:
 	var current_chunk = chunk_manager.get_or_create_chunk(cell)
 	if not current_chunk.is_chunk_awake():
 		return
@@ -236,7 +240,7 @@ func handle_water_movement(cell: Vector2i) -> void:
 	var below_cell = cell + Vector2i(0, 1)
 	var below_cell_id = sim.get_cell_source_id(below_cell)
 	if below_cell_id == EMPTY:
-		move_cell(cell, WATER, below_cell)
+		move_cell(cell, type, below_cell)
 		return
 	var left_cell = cell + Vector2i(-1, 0)
 	var right_cell = cell + Vector2i(1, 0)
@@ -247,17 +251,17 @@ func handle_water_movement(cell: Vector2i) -> void:
 	if random_direction == 0 and left_cell_id == EMPTY:
 		for i in range(disperse_rate, 0, -1):
 			if sim.get_cell_source_id(cell + Vector2i(-i, 0)) == EMPTY:
-				move_cell(cell, WATER, cell + Vector2i(-i, 0))
+				move_cell(cell, type, cell + Vector2i(-i, 0))
 				return
 	elif random_direction == 1 and right_cell_id == EMPTY:
 		for i in range(disperse_rate, 0, -1):
 			if sim.get_cell_source_id(cell + Vector2i(i, 0)) == EMPTY:
-				move_cell(cell, WATER, cell + Vector2i(i, 0))
+				move_cell(cell, type, cell + Vector2i(i, 0))
 				return
 	#elif random_direction == 0 and right_cell_id == EMPTY and right_cell.y < simulation_bottom_bound:
-		#move_cell(cell, WATER, right_cell)
+		#move_cell(cell, type, right_cell)
 	#elif random_direction == 1 and left_cell_id == EMPTY and left_cell.y < simulation_bottom_bound:
-		#move_cell(cell, WATER, left_cell)
+		#move_cell(cell, type, left_cell)
 
-func handle_stone(cell: Vector2) -> void:
+func handle_immovable(cell: Vector2, type: int) -> void:
 	return
