@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+
 const SPEED = 40.0
 const JUMP_VELOCITY = -150.0
 
@@ -9,6 +10,7 @@ var step_wait : float = 0.04
 var first_step : bool = true
 var first_step_timeout : float = 0.1
 var too_high : bool = false
+
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
