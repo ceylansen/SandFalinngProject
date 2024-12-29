@@ -28,6 +28,10 @@ window/stretch/mode="viewport"
 
 project/assembly_name="FallingSand"
 
+[global_group]
+
+Player=""
+
 [input]
 
 LeftMouse={
@@ -83,6 +87,9 @@ up={
 
 [layer_names]
 
+2d_render/layer_1="World"
+2d_render/layer_2="Player"
+2d_render/layer_3="Camera"
 2d_physics/layer_1="World"
 2d_physics/layer_2="Player"
 
