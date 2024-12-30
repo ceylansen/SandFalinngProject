@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dcjyvd7pggp7n"]
+[gd_scene load_steps=11 format=3 uid="uid://dcjyvd7pggp7n"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_cbd42"]
 [ext_resource type="Texture2D" uid="uid://cjrgj76vqwsug" path="res://sprites/mainguy.png" id="2_fbyfq"]
@@ -46,6 +46,9 @@ size = Vector2(7, 3)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_moio0"]
 size = Vector2(7, 11)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qnofg"]
+size = Vector2(0, 15)
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 script = ExtResource("1_cbd42")
@@ -55,6 +58,7 @@ sprite_frames = SubResource("SpriteFrames_fgp21")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+light_mask = 2
 position = Vector2(0.5, 1)
 shape = SubResource("RectangleShape2D_fn84r")
 
@@ -62,6 +66,7 @@ shape = SubResource("RectangleShape2D_fn84r")
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SingleStep"]
+light_mask = 2
 position = Vector2(0.5, 6.5)
 shape = SubResource("RectangleShape2D_qhh6b")
 debug_color = Color(0.972842, 0.0259822, 0.420163, 0.42)
@@ -72,6 +77,13 @@ debug_color = Color(0.972842, 0.0259822, 0.420163, 0.42)
 position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_moio0")
 debug_color = Color(0.675674, 0.506211, 0, 0.42)
+
+[node name="CameraArea" type="Area2D" parent="." groups=["Player"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraArea"]
+light_mask = 2
+position = Vector2(1, 0.5)
+shape = SubResource("RectangleShape2D_qnofg")
 
 [connection signal="body_entered" from="SingleStep" to="." method="_on_single_step_body_entered"]
 [connection signal="body_exited" from="SingleStep" to="." method="_on_single_step_body_exited"]

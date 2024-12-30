@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtpwgkqtxph8k"]
+
+[ext_resource type="Script" path="res://scripts/camera/camera.gd" id="1_vi4cp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nfg44"]
+size = Vector2(128, 128)
+
+[node name="Camera" type="Camera2D"]
+zoom = Vector2(6, 6)
+script = ExtResource("1_vi4cp")
+
+[node name="CameraArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraArea"]
+light_mask = 4
+visibility_layer = 3
+shape = SubResource("RectangleShape2D_nfg44")
+
+[connection signal="area_entered" from="CameraArea" to="." method="_on_camera_area_area_entered"]
