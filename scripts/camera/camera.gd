@@ -4,5 +4,4 @@ signal Switch
 
 func _on_camera_area_area_entered(area: Area2D) -> void:
 	if area.is_in_group("Player"):
-		print("Crossed!")
 		Switch.emit()

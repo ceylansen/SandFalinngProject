@@ -14,7 +14,6 @@ func connect_cameras() -> void:
 			camera.Switch.connect(self.switch_to_camera.bind(camera))
 
 func switch_to_camera(camera: Camera2D):
-	print(camera)
 	if camera == null or camera == current_camera:
 		return
 	camera.make_current()

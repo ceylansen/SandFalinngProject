@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://my0u1f2wned0"]
+[gd_scene load_steps=16 format=3 uid="uid://my0u1f2wned0"]
 
 [ext_resource type="Texture2D" uid="uid://cq824e8ecl03e" path="res://sprites/Sand.png" id="1_ecn4a"]
 [ext_resource type="Texture2D" uid="uid://bs438pbtgs7hf" path="res://sprites/Water.png" id="2_x7b15"]
@@ -50,6 +50,20 @@ texture_region_size = Vector2i(1, 1)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4l3lw"]
+resource_name = "RIGHT_WATER"
+texture = ExtResource("2_x7b15")
+texture_region_size = Vector2i(1, 1)
+0:0/0 = 0
+0:0/0/modulate = Color(1, 1, 1, 0.478431)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vvfpb"]
+resource_name = "LEFT_WATER"
+texture = ExtResource("2_x7b15")
+texture_region_size = Vector2i(1, 1)
+0:0/0 = 0
+0:0/0/modulate = Color(1, 1, 1, 0.478431)
+
 [sub_resource type="TileSet" id="TileSet_65q84"]
 tile_size = Vector2i(1, 1)
 physics_layer_0/collision_layer = 1
@@ -60,6 +74,8 @@ sources/2 = SubResource("TileSetAtlasSource_fgvpp")
 sources/3 = SubResource("TileSetAtlasSource_fuqpq")
 sources/4 = SubResource("TileSetAtlasSource_gt3kp")
 sources/5 = SubResource("TileSetAtlasSource_2ibd6")
+sources/6 = SubResource("TileSetAtlasSource_4l3lw")
+sources/7 = SubResource("TileSetAtlasSource_vvfpb")
 
 [node name="TileMapLayer" type="TileMapLayer"]
 tile_set = SubResource("TileSet_65q84")

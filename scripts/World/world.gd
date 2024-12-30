@@ -9,6 +9,8 @@ const STONE : int = 2
 const DIRT : int = 3
 const DARK_DIRT : int = 4
 const GRASS : int = 5
+const RIGHT_WATER : int = 6
+const LEFT_WATER : int = 7
 const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
 @onready var chunk_manager : ChunkManager = ChunkManager.new(16)
 
@@ -31,7 +33,9 @@ var elements = {
 	STONE: TileElement.new(STONE, handle_immovable),
 	DIRT: TileElement.new(DIRT, handl_solid_movement),
 	DARK_DIRT: TileElement.new(DARK_DIRT, handl_solid_movement),
-	GRASS: TileElement.new(DARK_DIRT, handle_immovable)
+	GRASS: TileElement.new(DARK_DIRT, handle_immovable),
+	RIGHT_WATER: TileElement.new(RIGHT_WATER, handle_liquid_movement),
+	LEFT_WATER: TileElement.new(LEFT_WATER, handle_liquid_movement)
 }
 
 
@@ -209,7 +213,7 @@ func handl_solid_movement(cell: Vector2i, type: int) -> void:
 
 	var below_cell = cell + Vector2i(0, 1)
 	var below_cell_id = sim.get_cell_source_id(below_cell)
-	if below_cell_id == WATER:
+	if below_cell_id == WATER or below_cell_id == LEFT_WATER or below_cell_id == RIGHT_WATER:
 		swap_cell(cell, type, below_cell, WATER)
 		return
 	if below_cell_id == EMPTY:
@@ -247,21 +251,59 @@ func handle_liquid_movement(cell: Vector2i, type: int) -> void:
 	var left_cell_id = sim.get_cell_source_id(left_cell)
 	var right_cell_id = sim.get_cell_source_id(right_cell)
 	var random_direction = randi() % 2
-	var disperse_rate: int = 3
+	
+	var disperse_rate: int = 2
+	
+	# Check for left and right water and switch to one another when one side is blocked but the other is not.
+	if type == LEFT_WATER:
+		if left_cell_id == EMPTY:
+			for i in range(disperse_rate, 0, -1):
+				if sim.get_cell_source_id(cell + Vector2i(-i, 1)) == EMPTY:
+					move_cell(cell, type, cell + Vector2i(-i, 1))
+					return
+				elif sim.get_cell_source_id(cell + Vector2i(-i, 0)) == EMPTY:
+					move_cell(cell, type, cell + Vector2i(-i, 0))
+					return
+		elif right_cell_id == EMPTY:
+			for i in range(disperse_rate, 0, -1):
+				if sim.get_cell_source_id(cell + Vector2i(i, 1)) == EMPTY:
+					move_cell(cell, type, cell + Vector2i(i, 1))
+					return
+				elif sim.get_cell_source_id(cell + Vector2i(i, 0)) == EMPTY:
+					move_cell(cell, RIGHT_WATER, cell + Vector2i(i, 0))
+					return
+	elif type == RIGHT_WATER:
+		if right_cell_id == EMPTY:
+			for i in range(disperse_rate, 0, -1):
+				if sim.get_cell_source_id(cell + Vector2i(i, 0)) == EMPTY:
+					move_cell(cell, type, cell + Vector2i(i, 0))
+					return
+		elif left_cell_id == EMPTY:
+			for i in range(disperse_rate, 0, -1):
+				if sim.get_cell_source_id(cell + Vector2i(-i, 0)) == EMPTY:
+					move_cell(cell, LEFT_WATER, cell + Vector2i(-i, 0))
+					return
+		
+	# Regular water starts off with a random direction.
 	if random_direction == 0 and left_cell_id == EMPTY:
 		for i in range(disperse_rate, 0, -1):
 			if sim.get_cell_source_id(cell + Vector2i(-i, 0)) == EMPTY:
-				move_cell(cell, type, cell + Vector2i(-i, 0))
-				return
+				if type == WATER:
+					move_cell(cell, LEFT_WATER, cell + Vector2i(-i, 0))
+					return
+				else:
+					move_cell(cell, type, cell + Vector2i(-i, 0))
+					return
 	elif random_direction == 1 and right_cell_id == EMPTY:
 		for i in range(disperse_rate, 0, -1):
 			if sim.get_cell_source_id(cell + Vector2i(i, 0)) == EMPTY:
-				move_cell(cell, type, cell + Vector2i(i, 0))
-				return
-	#elif random_direction == 0 and right_cell_id == EMPTY and right_cell.y < simulation_bottom_bound:
-		#move_cell(cell, type, right_cell)
-	#elif random_direction == 1 and left_cell_id == EMPTY and left_cell.y < simulation_bottom_bound:
-		#move_cell(cell, type, left_cell)
+				if type == WATER:
+					move_cell(cell, RIGHT_WATER, cell + Vector2i(i, 0))
+					return
+				else:
+					move_cell(cell, type, cell + Vector2i(i, 0))
+					return
+
 
 func handle_immovable(cell: Vector2, type: int) -> void:
 	return
