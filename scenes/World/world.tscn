@@ -13,6 +13,7 @@
 [node name="World" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_332vr")
+brush_size = 4
 debug = true
 
 [node name="Testscape" type="Sprite2D" parent="."]
