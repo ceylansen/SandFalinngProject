@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://my0u1f2wned0"]
+[gd_scene load_steps=18 format=3 uid="uid://my0u1f2wned0"]
 
 [ext_resource type="Texture2D" uid="uid://cq824e8ecl03e" path="res://sprites/Sand.png" id="1_ecn4a"]
 [ext_resource type="Texture2D" uid="uid://bs438pbtgs7hf" path="res://sprites/Water.png" id="2_x7b15"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bymaemf67xttr" path="res://sprites/dirt.png" id="4_lpi1i"]
 [ext_resource type="Texture2D" uid="uid://c71wlehg7120y" path="res://sprites/darkdirt.png" id="5_gfg17"]
 [ext_resource type="Texture2D" uid="uid://boqnu54mjoerr" path="res://sprites/Green.png" id="6_yl6to"]
+[ext_resource type="Texture2D" uid="uid://cdgoiij5dnkba" path="res://sprites/Snow.png" id="7_gvdra"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g7ii2"]
 resource_name = "Sand"
@@ -64,6 +65,12 @@ texture_region_size = Vector2i(1, 1)
 0:0/0 = 0
 0:0/0/modulate = Color(1, 1, 1, 0.478431)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ei3nl"]
+resource_name = "SNOW"
+texture = ExtResource("7_gvdra")
+texture_region_size = Vector2i(1, 1)
+0:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_65q84"]
 tile_size = Vector2i(1, 1)
 physics_layer_0/collision_layer = 1
@@ -76,6 +83,7 @@ sources/4 = SubResource("TileSetAtlasSource_gt3kp")
 sources/5 = SubResource("TileSetAtlasSource_2ibd6")
 sources/6 = SubResource("TileSetAtlasSource_4l3lw")
 sources/7 = SubResource("TileSetAtlasSource_vvfpb")
+sources/8 = SubResource("TileSetAtlasSource_ei3nl")
 
 [node name="TileMapLayer" type="TileMapLayer"]
 tile_set = SubResource("TileSet_65q84")

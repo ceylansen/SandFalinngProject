@@ -2,6 +2,12 @@ extends Node2D
 
 @onready var sim : TileMapLayer = $TileMapLayer
 
+
+const SOLID : int  = 0
+const LIQUID : int = 1
+const GAS : int = 2
+
+
 const EMPTY : int = -1
 const SAND : int = 0
 const WATER : int = 1
@@ -11,7 +17,11 @@ const DARK_DIRT : int = 4
 const GRASS : int = 5
 const RIGHT_WATER : int = 6
 const LEFT_WATER : int = 7
+const SNOW : int = 8
 const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
+
+
+
 @onready var chunk_manager : ChunkManager = ChunkManager.new(16)
 
 @export var brush_size : int = 1
@@ -21,21 +31,23 @@ var Brush : int = 0
 class TileElement:
 	var type : int
 	var movement_func: Callable
-	var updated : bool
+	var basetype : int
 	
-	func _init(t: int, move_func: Callable) -> void:
+	func _init(t: int, move_func: Callable, base: int) -> void:
 		type = t
 		movement_func = move_func
+		basetype = base
 
 var elements = {
-	SAND: TileElement.new(SAND, handl_solid_movement),
-	WATER: TileElement.new(WATER, handle_liquid_movement),
-	STONE: TileElement.new(STONE, handle_immovable),
-	DIRT: TileElement.new(DIRT, handl_solid_movement),
-	DARK_DIRT: TileElement.new(DARK_DIRT, handl_solid_movement),
-	GRASS: TileElement.new(DARK_DIRT, handle_immovable),
-	RIGHT_WATER: TileElement.new(RIGHT_WATER, handle_liquid_movement),
-	LEFT_WATER: TileElement.new(LEFT_WATER, handle_liquid_movement)
+	SAND: TileElement.new(SAND, handle_solid_movement, SOLID),
+	WATER: TileElement.new(WATER, handle_liquid_movement, LIQUID),
+	STONE: TileElement.new(STONE, handle_immovable, SOLID),
+	DIRT: TileElement.new(DIRT, handle_solid_movement, SOLID),
+	DARK_DIRT: TileElement.new(DARK_DIRT, handle_solid_movement, SOLID),
+	GRASS: TileElement.new(DARK_DIRT, handle_immovable, SOLID),
+	RIGHT_WATER: TileElement.new(RIGHT_WATER, handle_liquid_movement, LIQUID),
+	LEFT_WATER: TileElement.new(LEFT_WATER, handle_liquid_movement, LIQUID),
+	SNOW: TileElement.new(SNOW, handle_solid_movement, SOLID)
 }
 
 
@@ -103,6 +115,8 @@ func _process(_delta: float) -> void:
 		Brush = STONE
 	elif Input.is_action_just_pressed("4"):
 		Brush = DIRT
+	elif Input.is_action_just_pressed("5"):
+		Brush = SNOW
 	elif Input.is_action_just_pressed("erase"):
 		Brush = EMPTY
 	
@@ -203,7 +217,7 @@ func wake_neighboring_chunks(position: Vector2i, originalpos: Vector2i):
 	neighbor_chunk.set_awake(true)
 
 
-func handl_solid_movement(cell: Vector2i, type: int) -> void:
+func handle_solid_movement(cell: Vector2i, type: int) -> void:
 	var current_chunk = chunk_manager.get_or_create_chunk(cell)
 	if not current_chunk.is_chunk_awake():
 		return
@@ -213,11 +227,12 @@ func handl_solid_movement(cell: Vector2i, type: int) -> void:
 
 	var below_cell = cell + Vector2i(0, 1)
 	var below_cell_id = sim.get_cell_source_id(below_cell)
-	if below_cell_id == WATER or below_cell_id == LEFT_WATER or below_cell_id == RIGHT_WATER:
-		swap_cell(cell, type, below_cell, WATER)
-		return
 	if below_cell_id == EMPTY:
 		move_cell(cell, type, below_cell)
+		return
+	var below_element = elements.get(below_cell_id, null)
+	if below_element.basetype == LIQUID:
+		swap_cell(cell, type, below_cell, below_cell_id)
 		return
 	var left_cell = cell + Vector2i(-1, 1)
 	var right_cell = cell + Vector2i(1, 1)
@@ -304,6 +319,22 @@ func handle_liquid_movement(cell: Vector2i, type: int) -> void:
 					move_cell(cell, type, cell + Vector2i(i, 0))
 					return
 
+
+
+func handle_snow(cell: Vector2i, type: int) -> void:
+	var current_chunk = chunk_manager.get_or_create_chunk(cell)
+	if not current_chunk.is_chunk_awake():
+		return
+	
+	if moved_cells.has(cell):
+		return
+
+	var below_cell = cell + Vector2i(0, 1)
+	var below_cell_id = sim.get_cell_source_id(below_cell)
+	if below_cell_id == EMPTY:
+		move_cell(cell, type, below_cell)
+		return
+	var below_element = elements.get(below_cell_id, null)
 
 func handle_immovable(cell: Vector2, type: int) -> void:
 	return
