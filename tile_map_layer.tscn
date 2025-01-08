@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://my0u1f2wned0"]
+[gd_scene load_steps=19 format=3 uid="uid://my0u1f2wned0"]
 
 [ext_resource type="Texture2D" uid="uid://cq824e8ecl03e" path="res://sprites/Sand.png" id="1_ecn4a"]
 [ext_resource type="Texture2D" uid="uid://bs438pbtgs7hf" path="res://sprites/Water.png" id="2_x7b15"]
@@ -70,6 +70,15 @@ resource_name = "SNOW"
 texture = ExtResource("7_gvdra")
 texture_region_size = Vector2i(1, 1)
 0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u60xx"]
+resource_name = "ICE"
+texture = ExtResource("7_gvdra")
+texture_region_size = Vector2i(1, 1)
+0:0/0 = 0
+0:0/0/modulate = Color(0.588235, 1, 1, 1)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5)
 
 [sub_resource type="TileSet" id="TileSet_65q84"]
 tile_size = Vector2i(1, 1)
@@ -84,6 +93,7 @@ sources/5 = SubResource("TileSetAtlasSource_2ibd6")
 sources/6 = SubResource("TileSetAtlasSource_4l3lw")
 sources/7 = SubResource("TileSetAtlasSource_vvfpb")
 sources/8 = SubResource("TileSetAtlasSource_ei3nl")
+sources/9 = SubResource("TileSetAtlasSource_u60xx")
 
 [node name="TileMapLayer" type="TileMapLayer"]
 tile_set = SubResource("TileSet_65q84")

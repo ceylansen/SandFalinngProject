@@ -18,6 +18,7 @@ const GRASS : int = 5
 const RIGHT_WATER : int = 6
 const LEFT_WATER : int = 7
 const SNOW : int = 8
+const ICE : int = 9
 const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
 
 
@@ -47,7 +48,8 @@ var elements = {
 	GRASS: TileElement.new(DARK_DIRT, handle_immovable, SOLID),
 	RIGHT_WATER: TileElement.new(RIGHT_WATER, handle_liquid_movement, LIQUID),
 	LEFT_WATER: TileElement.new(LEFT_WATER, handle_liquid_movement, LIQUID),
-	SNOW: TileElement.new(SNOW, handle_solid_movement, SOLID)
+	SNOW: TileElement.new(SNOW, handle_snow_movement, SOLID),
+	ICE: TileElement.new(ICE, handle_immovable, SOLID)
 }
 
 
@@ -182,6 +184,7 @@ func move_cell(cell: Vector2i, type: int, cell_direction: Vector2i):
 	chunk_manager.get_or_create_chunk(cell).set_awake(true)
 	chunk_manager.get_or_create_chunk(cell_direction).set_awake(true)
 	#if cell_direction.x % chunk_manager.chunk_size == 0 or cell_direction.y % chunk_manager.chunk_size == 0:
+	moved_cells[cell_direction] = null
 	wake_neighboring_chunks(cell_direction + (cell_direction - cell), cell)
 
 	#if cell.x % chunk_manager.chunk_size == 0 or cell.y % chunk_manager.chunk_size == 0:
@@ -319,22 +322,70 @@ func handle_liquid_movement(cell: Vector2i, type: int) -> void:
 					move_cell(cell, type, cell + Vector2i(i, 0))
 					return
 
+func try_compact_snow(cell: Vector2i, below_cell: Vector2i, type: int) -> bool:
+	var left_gap = below_cell + Vector2i(-1, 0)
+	var right_gap = below_cell + Vector2i(1, 0)
+	if sim.get_cell_source_id(left_gap) == EMPTY:
+		move_cell(cell, type, left_gap)
+		return true
+	elif sim.get_cell_source_id(right_gap) == EMPTY:
+		move_cell(cell, type, right_gap)
+		return true
+	return false
 
-
-func handle_snow(cell: Vector2i, type: int) -> void:
+func handle_snow_movement(cell: Vector2i, type: int) -> void:
 	var current_chunk = chunk_manager.get_or_create_chunk(cell)
 	if not current_chunk.is_chunk_awake():
 		return
-	
+
 	if moved_cells.has(cell):
 		return
 
 	var below_cell = cell + Vector2i(0, 1)
 	var below_cell_id = sim.get_cell_source_id(below_cell)
+	
+	var drift_direction = (randi() % 3) - 1
+	var drift_cell = cell + Vector2i(drift_direction, 1)
+	if sim.get_cell_source_id(drift_cell) == EMPTY:
+		move_cell(cell, type, drift_cell)
+		return
+	
 	if below_cell_id == EMPTY:
 		move_cell(cell, type, below_cell)
 		return
+
+	
 	var below_element = elements.get(below_cell_id, null)
+	if below_element.basetype == LIQUID:
+		place_cell(below_cell, ICE)
+		# Optional: Start tracking "snow on water" for freezing behavior
+	
+	var above_cell = cell + Vector2i(0, -1)
+	var above_cell_id = sim.get_cell_source_id(above_cell)
+	if above_cell_id != EMPTY:
+		var above_element = elements.get(above_cell_id, null)
+		if above_element.basetype == LIQUID:
+			place_cell(above_cell, ICE)
+
+	var left_cell = cell + Vector2i(-1, 1)
+	var right_cell = cell + Vector2i(1, 1)
+	var left_cell_id = sim.get_cell_source_id(left_cell)
+	var right_cell_id = sim.get_cell_source_id(right_cell)
+
+	var random_direction = randi() % 2
+	if random_direction == 0 and left_cell_id == EMPTY:
+		move_cell(cell, type, left_cell)
+		return
+	elif random_direction == 1 and right_cell_id == EMPTY:
+		move_cell(cell, type, right_cell)
+		return
+
+	var below_is_snow = elements.get(below_cell_id, null).basetype == SOLID
+	if below_is_snow:
+		var compacted = try_compact_snow(cell, below_cell, type)
+		if compacted:
+			return
+
 
 func handle_immovable(cell: Vector2, type: int) -> void:
 	return
