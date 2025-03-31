@@ -358,7 +358,6 @@ func handle_snow_movement(cell: Vector2i, type: int) -> void:
 	var below_element = elements.get(below_cell_id, null)
 	if below_element.basetype == LIQUID:
 		place_cell(below_cell, ICE)
-		# Optional: Start tracking "snow on water" for freezing behavior
 	
 	var above_cell = cell + Vector2i(0, -1)
 	var above_cell_id = sim.get_cell_source_id(above_cell)
