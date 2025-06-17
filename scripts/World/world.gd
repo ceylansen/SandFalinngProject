@@ -21,6 +21,8 @@ const SNOW : int = 8
 const ICE : int = 9
 const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
 
+const WATER_EVAP_CHANCE : int = 1
+
 
 
 @onready var chunk_manager : ChunkManager = ChunkManager.new(16)
@@ -40,6 +42,7 @@ class TileElement:
 		basetype = base
 
 var elements = {
+	EMPTY: TileElement.new(EMPTY, handle_empty, EMPTY),
 	SAND: TileElement.new(SAND, handle_solid_movement, SOLID),
 	WATER: TileElement.new(WATER, handle_liquid_movement, LIQUID),
 	STONE: TileElement.new(STONE, handle_immovable, SOLID),
@@ -269,8 +272,15 @@ func handle_liquid_movement(cell: Vector2i, type: int) -> void:
 	var left_cell_id = sim.get_cell_source_id(left_cell)
 	var right_cell_id = sim.get_cell_source_id(right_cell)
 	var random_direction = randi() % 2
-	
+	var evaporate = randi() % 100
 	var disperse_rate: int = 2
+	
+	if evaporate <= WATER_EVAP_CHANCE:
+		var below_element = elements.get(below_cell_id, null)
+		var right_element = elements.get(right_cell_id, null)
+		var left_element = elements.get(left_cell_id, null)
+		if below_element.basetype != LIQUID and right_element.basetype != LIQUID and left_element.basetype != LIQUID:
+			place_cell(cell, EMPTY)
 	
 	# Check for left and right water and switch to one another when one side is blocked but the other is not.
 	if type == LEFT_WATER:
@@ -387,4 +397,7 @@ func handle_snow_movement(cell: Vector2i, type: int) -> void:
 
 
 func handle_immovable(cell: Vector2, type: int) -> void:
+	return
+
+func handle_empty(cell: Vector2, type: int) -> void:
 	return

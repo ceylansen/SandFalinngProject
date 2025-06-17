@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://f7ahrxd8u8s2"]
+[gd_scene load_steps=14 format=4 uid="uid://f7ahrxd8u8s2"]
 
 [ext_resource type="Script" path="res://scripts/World/world.gd" id="1_332vr"]
 [ext_resource type="Texture2D" uid="uid://cryuhrg6fu3kv" path="res://sprites/testtestbg.png" id="2_0ig2j"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c02ydc2ssvjfd" path="res://ui/ui_overlay.tscn" id="9_r4ka0"]
 [ext_resource type="Shader" path="res://scripts/shader/rain.gdshader" id="10_fjrjg"]
 [ext_resource type="Texture2D" uid="uid://bw80ahj5m87rn" path="res://sprites/rain.png" id="10_igfgm"]
+[ext_resource type="PackedScene" uid="uid://ca38ei2il3xjr" path="res://scenes/World/weather.tscn" id="12_hmtjn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_esh1o"]
 shader = ExtResource("10_fjrjg")
@@ -19,13 +20,13 @@ shader_parameter/speed = -0.8
 [node name="World" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_332vr")
-brush_size = 2
 debug = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -1
 
 [node name="Pattern" type="TextureRect" parent="CanvasLayer"]
+visible = false
 texture_repeat = 2
 material = SubResource("ShaderMaterial_esh1o")
 anchors_preset = 15
@@ -77,3 +78,6 @@ tile_map_data = PackedByteArray("AAAJAC0ABQAAAAAAAAAKAC0ABQAAAAAAAAALAC0ABQAAAAA
 position = Vector2(-248, -26)
 
 [node name="UIOverlay" parent="." instance=ExtResource("9_r4ka0")]
+visible = false
+
+[node name="Weather" parent="." instance=ExtResource("12_hmtjn")]
