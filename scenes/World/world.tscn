@@ -15,7 +15,6 @@
 [node name="World" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_332vr")
-debug = true
 
 [node name="Testscape" type="Sprite2D" parent="."]
 visible = false
@@ -26,7 +25,7 @@ texture = ExtResource("3_lysqe")
 follow_viewport_enabled = false
 
 [node name="Background" type="CanvasLayer" parent="."]
-layer = -2
+layer = -1
 follow_viewport_enabled = true
 
 [node name="Control" type="Control" parent="Background"]

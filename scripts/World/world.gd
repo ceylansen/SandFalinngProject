@@ -404,5 +404,4 @@ func handle_empty(cell: Vector2, type: int) -> void:
 
 
 func _on_weather_drop_spot(DropPos: Vector2) -> void:
-	print("Dropped drop:", DropPos)
 	place_cell(DropPos, WATER)
