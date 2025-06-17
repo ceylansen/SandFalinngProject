@@ -45,7 +45,7 @@ player = NodePath("../Player")
 current_camera = NodePath("Camera1")
 
 [node name="Camera1" parent="CameraManager" instance=ExtResource("2_cll8l")]
-position = Vector2(128, 0)
+position = Vector2(128, 1)
 
 [node name="Camera2" parent="CameraManager" instance=ExtResource("2_cll8l")]
 modulate = Color(0.447059, 0.396078, 1, 1)
@@ -63,8 +63,24 @@ position = Vector2(256, 0)
 
 [node name="WeatherManager" type="Node2D" parent="."]
 
-[node name="Weather" parent="." instance=ExtResource("12_hmtjn")]
-Raining = true
+[node name="Weather1" parent="WeatherManager" instance=ExtResource("12_hmtjn")]
+position = Vector2(128, 0)
+Snowing = true
+
+[node name="Weather2" parent="WeatherManager" instance=ExtResource("12_hmtjn")]
+Snowing = true
+
+[node name="Weather3" parent="WeatherManager" instance=ExtResource("12_hmtjn")]
+position = Vector2(-128, 0)
+Snowing = true
+
+[node name="Weather4" parent="WeatherManager" instance=ExtResource("12_hmtjn")]
+position = Vector2(-256, 0)
+Snowing = true
+
+[node name="Weather5" parent="WeatherManager" instance=ExtResource("12_hmtjn")]
+position = Vector2(256, 0)
+Snowing = true
 
 [node name="House" type="Sprite2D" parent="."]
 position = Vector2(176, 0)
@@ -79,4 +95,8 @@ position = Vector2(31, 36)
 
 [node name="UIOverlay" parent="." instance=ExtResource("9_r4ka0")]
 
-[connection signal="DropSpot" from="Weather" to="." method="_on_weather_drop_spot"]
+[connection signal="DropSpot" from="WeatherManager/Weather1" to="." method="_on_weather_drop_spot"]
+[connection signal="DropSpot" from="WeatherManager/Weather2" to="." method="_on_weather_drop_spot"]
+[connection signal="DropSpot" from="WeatherManager/Weather3" to="." method="_on_weather_drop_spot"]
+[connection signal="DropSpot" from="WeatherManager/Weather4" to="." method="_on_weather_drop_spot"]
+[connection signal="DropSpot" from="WeatherManager/Weather5" to="." method="_on_weather_drop_spot"]

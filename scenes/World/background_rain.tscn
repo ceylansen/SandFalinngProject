@@ -12,6 +12,7 @@ layer = -1
 follow_viewport_enabled = true
 
 [node name="Pattern" type="TextureRect" parent="."]
+visible = false
 texture_repeat = 2
 material = SubResource("ShaderMaterial_esh1o")
 offset_right = 256.0

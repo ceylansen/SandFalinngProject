@@ -2,11 +2,20 @@
 
 [ext_resource type="Script" path="res://scripts/World/weather.gd" id="1_68y8i"]
 
-[node name="Weather" type="Area2D"]
+[node name="Weather" type="Node2D"]
 script = ExtResource("1_68y8i")
 
 [node name="RainDropTimer" type="Timer" parent="."]
-wait_time = 0.05
+wait_time = 0.5
+autostart = true
+
+[node name="SnowTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true
+
+[node name="HeavyRain" type="Timer" parent="."]
+wait_time = 0.1
 autostart = true
 
 [connection signal="timeout" from="RainDropTimer" to="." method="_on_rain_drop_timer_timeout"]
+[connection signal="timeout" from="SnowTimer" to="." method="_on_snow_timer_timeout"]

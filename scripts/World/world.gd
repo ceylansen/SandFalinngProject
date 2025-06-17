@@ -367,7 +367,7 @@ func handle_snow_movement(cell: Vector2i, type: int) -> void:
 	
 	var below_element = elements.get(below_cell_id, null)
 	if below_element.basetype == LIQUID:
-		place_cell(below_cell, ICE)
+		place_cell(cell, ICE)
 	
 	var above_cell = cell + Vector2i(0, -1)
 	var above_cell_id = sim.get_cell_source_id(above_cell)
@@ -403,5 +403,5 @@ func handle_empty(cell: Vector2, type: int) -> void:
 	return
 
 
-func _on_weather_drop_spot(DropPos: Vector2) -> void:
-	place_cell(DropPos, WATER)
+func _on_weather_drop_spot(DropPos: Vector2, type: int) -> void:
+	place_cell(DropPos, type)
