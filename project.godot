@@ -21,7 +21,6 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=1024
 window/size/viewport_height=768
-window/size/mode=3
 window/stretch/mode="viewport"
 
 [dotnet]
@@ -97,6 +96,7 @@ up={
 2d_render/layer_3="Camera"
 2d_physics/layer_1="World"
 2d_physics/layer_2="Player"
+2d_physics/layer_3="Liquid"
 
 [rendering]
 

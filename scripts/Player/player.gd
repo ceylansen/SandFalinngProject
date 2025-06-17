@@ -3,6 +3,9 @@ extends CharacterBody2D
 
 const SPEED = 40.0
 const JUMP_VELOCITY = -150.0
+const WATER_SPEED = 30.0
+const WATER_GRAVITY = 0.10
+const WATER_JUMP = -50
 
 var stair_step : bool = false
 var stepped : bool = false
@@ -10,13 +13,27 @@ var step_wait : float = 0.04
 var first_step : bool = true
 var first_step_timeout : float = 0.1
 var too_high : bool = false
+var submerged : bool = false
+var water_top : bool = false
+var water_bottom : bool = false
+var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 
 func _physics_process(delta: float) -> void:
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+	#if water_top == true and water_bottom == true:
+		#submerged = true
+	#else:
+		#submerged = false
 
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if not is_on_floor():
+		if !submerged:
+			velocity.y += gravity * delta
+		elif submerged:
+			velocity.y = clampf(velocity.y + (gravity * delta * WATER_GRAVITY), -100, 50)
+
+	if Input.is_action_just_pressed("ui_accept") and submerged:
+		velocity.y = WATER_JUMP
+	elif Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 	var direction := Input.get_axis("left", "right")
 	if direction == -1:
@@ -30,7 +47,10 @@ func _physics_process(delta: float) -> void:
 			if not stepped and not too_high:
 				check_first_step()
 				step_logic(direction)
-		velocity.x = direction * SPEED
+		if submerged:
+			velocity.x = direction * WATER_SPEED
+		else:
+			velocity.x = direction * SPEED
 	else:
 		$AnimatedSprite2D.play("idle")
 		velocity.x = move_toward(velocity.x, 0, SPEED)
@@ -70,3 +90,31 @@ func _on_too_high_step_body_entered(body: Node2D) -> void:
 func _on_too_high_step_body_exited(body: Node2D) -> void:
 	if body is TileMapLayer:
 		too_high = false
+
+
+func _on_water_top_body_entered(body: Node2D) -> void:
+	if body is TileMapLayer:
+		if water_tile_check(body):
+			print("entered")
+			submerged = true
+
+
+func _on_water_top_body_exited(body: Node2D) -> void:
+	if body is TileMapLayer:
+		if water_tile_check(body):
+			print("exited")
+			submerged = false
+
+func water_tile_check(body: TileMapLayer) -> bool:
+	var tilemap := body as TileMapLayer
+	var tile_pos = tilemap.local_to_map(tilemap.to_local($WaterTop.global_position))
+
+	var source_id = tilemap.get_cell_source_id(tile_pos)
+	if source_id == 1 or source_id == 6 or source_id == 7:
+		return true
+	else:
+		return false
+
+
+func _on_water_detect_water_state(is_in_water: bool) -> void:
+	submerged = is_in_water

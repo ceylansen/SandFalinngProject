@@ -22,6 +22,8 @@ texture_region_size = Vector2i(1, 1)
 0:0/0 = 0
 0:0/0/modulate = Color(1, 1, 1, 0.478431)
 0:0/0/z_index = 1
+0:0/0/physics_layer_1/polygon_0/points = PackedVector2Array(-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5)
+0:0/0/custom_data_0 = 1
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fgvpp"]
 resource_name = "Stone"
@@ -57,6 +59,8 @@ texture = ExtResource("2_x7b15")
 texture_region_size = Vector2i(1, 1)
 0:0/0 = 0
 0:0/0/modulate = Color(1, 1, 1, 0.478431)
+0:0/0/z_index = 1
+0:0/0/physics_layer_1/polygon_0/points = PackedVector2Array(-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vvfpb"]
 resource_name = "LEFT_WATER"
@@ -64,6 +68,8 @@ texture = ExtResource("2_x7b15")
 texture_region_size = Vector2i(1, 1)
 0:0/0 = 0
 0:0/0/modulate = Color(1, 1, 1, 0.478431)
+0:0/0/z_index = 1
+0:0/0/physics_layer_1/polygon_0/points = PackedVector2Array(-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ei3nl"]
 resource_name = "SNOW"
@@ -84,6 +90,10 @@ texture_region_size = Vector2i(1, 1)
 tile_size = Vector2i(1, 1)
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 3
+physics_layer_1/collision_layer = 4
+physics_layer_1/collision_mask = 0
+custom_data_layer_0/name = "Liquid"
+custom_data_layer_0/type = 2
 sources/0 = SubResource("TileSetAtlasSource_g7ii2")
 sources/1 = SubResource("TileSetAtlasSource_ftfmh")
 sources/2 = SubResource("TileSetAtlasSource_fgvpp")
