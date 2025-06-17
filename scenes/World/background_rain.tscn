@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://hm1qyenx62yk"]
+
+[ext_resource type="Shader" path="res://scripts/shader/rain.gdshader" id="1_11bvs"]
+[ext_resource type="Texture2D" uid="uid://bw80ahj5m87rn" path="res://sprites/rain.png" id="2_2du1k"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_esh1o"]
+shader = ExtResource("1_11bvs")
+shader_parameter/speed = -0.8
+
+[node name="BackgroundRain" type="CanvasLayer"]
+layer = -1
+follow_viewport_enabled = true
+
+[node name="Pattern" type="TextureRect" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_esh1o")
+offset_right = 256.0
+offset_bottom = 192.0
+scale = Vector2(4, 4)
+texture = ExtResource("2_2du1k")
+stretch_mode = 1

@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var sim : TileMapLayer = $TileMapLayer
+@onready var sim : TileMapLayer = %TileMapLayer
 
 
 const SOLID : int  = 0
@@ -401,3 +401,8 @@ func handle_immovable(cell: Vector2, type: int) -> void:
 
 func handle_empty(cell: Vector2, type: int) -> void:
 	return
+
+
+func _on_weather_drop_spot(DropPos: Vector2) -> void:
+	print("Dropped drop:", DropPos)
+	place_cell(DropPos, WATER)
