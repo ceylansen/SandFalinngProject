@@ -62,3 +62,4 @@ texture = ExtResource("2_2du1k")
 stretch_mode = 1
 
 [node name="CanvasModulate" parent="." instance=ExtResource("4_588hv")]
+visible = false

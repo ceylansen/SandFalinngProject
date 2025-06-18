@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var sim : TileMapLayer = %TileMapLayer
-
+@onready var Player : CharacterBody2D = %Player
 
 const SOLID : int  = 0
 const LIQUID : int = 1
@@ -108,7 +108,7 @@ class ChunkManager:
 			chunks[chunk_key] = chunk
 		return chunks[chunk_key]
 	
-func _draw():
+func _draw() -> void:
 	for chunk_key in chunk_manager.chunks.keys():
 		var chunk = chunk_manager.chunks[chunk_key]
 		var chunk_top_left = chunk.get_top_left()
@@ -118,6 +118,8 @@ func _draw():
 		#else:
 			#draw_rect(Rect2(chunk_top_left, Vector2(chunk_size, chunk_size)), Color(1, 0, 0, 0.5))
 
+func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func _process(_delta: float) -> void:
 	moved_cells.clear()
@@ -134,14 +136,16 @@ func _process(_delta: float) -> void:
 	elif Input.is_action_just_pressed("erase"):
 		Brush = EMPTY
 	
+	if Input.is_action_pressed("RightMouse"):
+		pickup_check()
+		#for x in range(-brush_size, brush_size + 1):
+			#for y in range(-brush_size, 0):
+				#var pos = sim.local_to_map(Vector2i(get_global_mouse_position().x + x, get_global_mouse_position().y + y))
+				##var pos = sim.local_to_map(get_global_mouse_position())
+##sim.set_cell(sim.local_to_map(Vector2i(get_global_mouse_position().x + x, get_global_mouse_position().y + y)), Brush, ATLAS_COORDS)
+				#place_cell(pos, Brush)
 	if Input.is_action_pressed("LeftMouse"):
-		for x in range(-brush_size, brush_size + 1):
-			for y in range(-brush_size, 0):
-				var pos = sim.local_to_map(Vector2i(get_global_mouse_position().x + x, get_global_mouse_position().y + y))
-				#var pos = sim.local_to_map(get_global_mouse_position())
-#sim.set_cell(sim.local_to_map(Vector2i(get_global_mouse_position().x + x, get_global_mouse_position().y + y)), Brush, ATLAS_COORDS)
-				place_cell(pos, Brush)
-	
+		eject_check()
 	var pixels : Array = []
 	for chunk in chunk_manager.chunks.values():
 		if chunk.is_chunk_awake():
@@ -341,6 +345,7 @@ func handle_liquid_movement(cell: Vector2i, type: int) -> void:
 					move_cell(cell, type, cell + Vector2i(i, 0))
 					return
 
+
 func try_compact_snow(cell: Vector2i, below_cell: Vector2i, type: int) -> bool:
 	var left_gap = below_cell + Vector2i(-1, 0)
 	var right_gap = below_cell + Vector2i(1, 0)
@@ -351,6 +356,7 @@ func try_compact_snow(cell: Vector2i, below_cell: Vector2i, type: int) -> bool:
 		move_cell(cell, type, right_gap)
 		return true
 	return false
+
 
 func handle_snow_movement(cell: Vector2i, type: int) -> void:
 	var current_chunk = chunk_manager.get_or_create_chunk(cell)
@@ -414,6 +420,7 @@ func handle_snow_movement(cell: Vector2i, type: int) -> void:
 func handle_immovable(cell: Vector2, type: int) -> void:
 	return
 
+
 func handle_empty(cell: Vector2, type: int) -> void:
 	return
 
@@ -437,3 +444,43 @@ func _on_snow_melt_timer_timeout() -> void:
 				place_cell(snow[snow_to_melt], WATER)
 			else:
 				place_cell(snow[snow_to_melt], EMPTY)
+
+func pickup_check() -> void:
+	var cell = sim.local_to_map(Vector2i(get_global_mouse_position().x, get_global_mouse_position().y))
+	var type = sim.get_cell_source_id(cell)
+	var above_cell = cell + Vector2i(0, -1)
+	var above_cell_id = sim.get_cell_source_id(above_cell)
+	if above_cell_id == EMPTY:
+		Player.pocket_pickup(cell, type)
+		return
+		
+
+func eject_check() -> void:
+	var cell = sim.local_to_map(Vector2i(get_global_mouse_position().x, get_global_mouse_position().y))
+	var cell_id = sim.get_cell_source_id(cell)
+	var above_cell = cell + Vector2i(0, -1)
+	var above_cell_id = sim.get_cell_source_id(above_cell)
+	if above_cell_id == EMPTY:
+		if cell_id == EMPTY:
+			Player.eject_pixel(cell)
+			return
+		else:
+			Player.eject_pixel(above_cell)
+			return
+	var left_cell = cell + Vector2i(-1, 0)
+	var right_cell = cell + Vector2i(1, 0)
+	var left_cell_id = sim.get_cell_source_id(left_cell)
+	var right_cell_id = sim.get_cell_source_id(right_cell)
+	
+	if left_cell_id == EMPTY:
+		Player.eject_pixel(cell)
+		return
+
+func _on_player_picked_up(cell: Vector2, type: int) -> void:
+	place_cell(cell, EMPTY)
+
+
+func _on_player_ejected(cell: Vector2, type: int) -> void:
+	if type == EMPTY:
+		return
+	place_cell(cell, type)

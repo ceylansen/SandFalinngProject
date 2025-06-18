@@ -18,13 +18,10 @@ var water_top : bool = false
 var water_bottom : bool = false
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+signal picked_up(cell : Vector2, type : int)
+signal ejected(cell : Vector2, type : int)
 
 func _physics_process(delta: float) -> void:
-	#if water_top == true and water_bottom == true:
-		#submerged = true
-	#else:
-		#submerged = false
-
 	if not is_on_floor():
 		if !submerged:
 			velocity.y += gravity * delta
@@ -54,6 +51,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		$AnimatedSprite2D.play("idle")
 		velocity.x = move_toward(velocity.x, 0, SPEED)
+	if Input.is_action_pressed("down"):
+		$AnimatedSprite2D.play("down")
+		velocity.x = 0
 	move_and_slide()
 
 func step_logic(direction):
@@ -81,23 +81,19 @@ func _on_single_step_body_exited(body: Node2D) -> void:
 	if body is TileMapLayer:
 		stair_step = false
 
-
 func _on_too_high_step_body_entered(body: Node2D) -> void:
 	if body is TileMapLayer:
 		too_high = true
 
-
 func _on_too_high_step_body_exited(body: Node2D) -> void:
 	if body is TileMapLayer:
 		too_high = false
-
 
 func _on_water_top_body_entered(body: Node2D) -> void:
 	if body is TileMapLayer:
 		if water_tile_check(body):
 			print("entered")
 			submerged = true
-
 
 func _on_water_top_body_exited(body: Node2D) -> void:
 	if body is TileMapLayer:
@@ -115,6 +111,17 @@ func water_tile_check(body: TileMapLayer) -> bool:
 	else:
 		return false
 
-
 func _on_water_detect_water_state(is_in_water: bool) -> void:
 	submerged = is_in_water
+
+func pocket_pickup(cell : Vector2, type : int) -> void:
+	if type == -1:
+		return
+	if global_position.distance_to(cell) < 20:
+		if %Pocket.AddPixel(type):
+			emit_signal("picked_up", cell, type)
+
+func eject_pixel(cell : Vector2) -> void:
+	if global_position.distance_to(cell) < 20:
+		var type : int = %Pocket.EjectTopPixel()
+		emit_signal("ejected", cell, type)
