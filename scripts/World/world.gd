@@ -23,7 +23,7 @@ const ROOF : int = 10
 const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
 
 const WATER_EVAP_CHANCE : int = 1
-
+var weather_type : int = 0
 
 
 @onready var chunk_manager : ChunkManager = ChunkManager.new(8)
@@ -369,14 +369,18 @@ func handle_snow_movement(cell: Vector2i, type: int) -> void:
 	
 	var below_element = elements.get(below_cell_id, null)
 	if below_element.basetype == LIQUID:
-		place_cell(cell, ICE)
+		place_cell(cell, EMPTY)
+		place_cell(below_cell, ICE)
+		return
 	
 	var above_cell = cell + Vector2i(0, -1)
 	var above_cell_id = sim.get_cell_source_id(above_cell)
 	if above_cell_id != EMPTY:
 		var above_element = elements.get(above_cell_id, null)
 		if above_element.basetype == LIQUID:
-			place_cell(above_cell, ICE)
+			place_cell(above_cell, EMPTY)
+			place_cell(cell, ICE)
+			return
 
 	var left_cell = cell + Vector2i(-1, 1)
 	var right_cell = cell + Vector2i(1, 1)
@@ -391,7 +395,7 @@ func handle_snow_movement(cell: Vector2i, type: int) -> void:
 		move_cell(cell, type, right_cell)
 		return
 
-	var below_is_snow = elements.get(below_cell_id, null).basetype == SOLID
+	var below_is_snow = elements.get(below_cell_id, null).type == SNOW
 	if below_is_snow:
 		var compacted = try_compact_snow(cell, below_cell, type)
 		if compacted:
@@ -407,3 +411,20 @@ func handle_empty(cell: Vector2, type: int) -> void:
 
 func _on_weather_manager_dropper(DropPos: Vector2, type: int) -> void:
 	place_cell(DropPos, type)
+
+
+func _on_weather_manager_weather_type(Weather: int) -> void:
+	%BackgroundWeather.ChangeBackground(Weather)
+	weather_type = Weather
+
+
+func _on_snow_melt_timer_timeout() -> void:
+	if weather_type != 2:
+		var snow = sim.get_used_cells_by_id(SNOW)
+		if snow.size() != 0:
+			var snow_to_melt = randi() % snow.size()
+			var waterchance = randi() % 5
+			if waterchance == 1:
+				place_cell(snow[snow_to_melt], WATER)
+			else:
+				place_cell(snow[snow_to_melt], EMPTY)

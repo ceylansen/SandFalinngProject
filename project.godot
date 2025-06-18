@@ -13,7 +13,7 @@ config_version=5
 config/name="FallingSand"
 run/main_scene="res://scenes/World/world.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
-run/max_fps=60
+run/max_fps=30
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 

@@ -1,17 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://hm1qyenx62yk"]
+[gd_scene load_steps=5 format=3 uid="uid://hm1qyenx62yk"]
 
 [ext_resource type="Shader" path="res://scripts/shader/rain.gdshader" id="1_11bvs"]
+[ext_resource type="Script" path="res://scripts/World/background_rain.gd" id="1_wuh2y"]
 [ext_resource type="Texture2D" uid="uid://bw80ahj5m87rn" path="res://sprites/rain.png" id="2_2du1k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_esh1o"]
 shader = ExtResource("1_11bvs")
 shader_parameter/speed = -0.68
 
-[node name="BackgroundRain" type="CanvasLayer"]
+[node name="BackgroundWeather" type="CanvasLayer"]
 layer = -1
 follow_viewport_enabled = true
+script = ExtResource("1_wuh2y")
 
-[node name="WeatherBackground" type="ColorRect" parent="."]
+[node name="RainBackground" type="ColorRect" parent="."]
 visible = false
 layout_direction = 1
 anchors_preset = 15
@@ -20,6 +22,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.642166, 0.83668, 0.994185, 1)
+
+[node name="SnowBackground" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.785591, 0.8791, 0.998588, 1)
 
 [node name="Pattern" type="TextureRect" parent="."]
 visible = false
