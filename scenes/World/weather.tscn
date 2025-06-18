@@ -17,6 +17,11 @@ autostart = true
 wait_time = 0.1
 autostart = true
 
+[node name="HeavySnow" type="Timer" parent="."]
+wait_time = 0.05
+autostart = true
+
 [connection signal="timeout" from="RainDropTimer" to="." method="_on_rain_drop_timer_timeout"]
 [connection signal="timeout" from="SnowTimer" to="." method="_on_snow_timer_timeout"]
 [connection signal="timeout" from="HeavyRain" to="." method="_on_heavy_rain_timeout"]
+[connection signal="timeout" from="HeavySnow" to="." method="_on_heavy_snow_timeout"]

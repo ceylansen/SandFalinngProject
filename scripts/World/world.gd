@@ -20,6 +20,10 @@ const LEFT_WATER : int = 7
 const SNOW : int = 8
 const ICE : int = 9
 const ROOF : int = 10
+const MEDIUMDIRT : int = 11
+const DARKSTONE : int = 12
+const FALLING_SNOW : int = 13
+
 const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
 
 const WATER_EVAP_CHANCE : int = 1
@@ -54,7 +58,10 @@ var elements = {
 	LEFT_WATER: TileElement.new(LEFT_WATER, handle_liquid_movement, LIQUID),
 	SNOW: TileElement.new(SNOW, handle_snow_movement, SOLID),
 	ICE: TileElement.new(ICE, handle_immovable, SOLID),
-	ROOF: TileElement.new(ROOF, handle_immovable, SOLID)
+	ROOF: TileElement.new(ROOF, handle_immovable, SOLID),
+	MEDIUMDIRT: TileElement.new(MEDIUMDIRT, handle_solid_movement, SOLID),
+	DARKSTONE: TileElement.new(DARKSTONE, handle_immovable, SOLID),
+	FALLING_SNOW: TileElement.new(FALLING_SNOW, handle_snow_movement, SOLID)
 }
 
 
@@ -123,7 +130,7 @@ func _process(_delta: float) -> void:
 	elif Input.is_action_just_pressed("4"):
 		Brush = DIRT
 	elif Input.is_action_just_pressed("5"):
-		Brush = SNOW
+		Brush = FALLING_SNOW
 	elif Input.is_action_just_pressed("erase"):
 		Brush = EMPTY
 	
@@ -359,13 +366,15 @@ func handle_snow_movement(cell: Vector2i, type: int) -> void:
 	var drift_direction = (randi() % 3) - 1
 	var drift_cell = cell + Vector2i(drift_direction, 1)
 	if sim.get_cell_source_id(drift_cell) == EMPTY:
-		move_cell(cell, type, drift_cell)
+		move_cell(cell, FALLING_SNOW, drift_cell)
 		return
-	
-	if below_cell_id == EMPTY:
-		move_cell(cell, type, below_cell)
+	elif below_cell_id == EMPTY:
+		move_cell(cell, FALLING_SNOW, below_cell)
 		return
-
+	#Turn Falling snow into snow
+	if type == FALLING_SNOW:
+		place_cell(cell, SNOW)
+		return
 	
 	var below_element = elements.get(below_cell_id, null)
 	if below_element.basetype == LIQUID:
@@ -420,7 +429,7 @@ func _on_weather_manager_weather_type(Weather: int) -> void:
 
 func _on_snow_melt_timer_timeout() -> void:
 	if weather_type != 2:
-		var snow = sim.get_used_cells_by_id(SNOW)
+		var snow = sim.get_used_cells_by_id(SNOW, ATLAS_COORDS)
 		if snow.size() != 0:
 			var snow_to_melt = randi() % snow.size()
 			var waterchance = randi() % 5
