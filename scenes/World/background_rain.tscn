@@ -5,14 +5,13 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_esh1o"]
 shader = ExtResource("1_11bvs")
-shader_parameter/speed = -0.5
+shader_parameter/speed = -0.68
 
 [node name="BackgroundRain" type="CanvasLayer"]
 layer = -1
 follow_viewport_enabled = true
 
 [node name="Pattern" type="TextureRect" parent="."]
-visible = false
 texture_repeat = 2
 material = SubResource("ShaderMaterial_esh1o")
 offset_right = 256.0

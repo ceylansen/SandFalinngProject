@@ -19,13 +19,14 @@ const RIGHT_WATER : int = 6
 const LEFT_WATER : int = 7
 const SNOW : int = 8
 const ICE : int = 9
+const ROOF : int = 10
 const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
 
 const WATER_EVAP_CHANCE : int = 1
 
 
 
-@onready var chunk_manager : ChunkManager = ChunkManager.new(16)
+@onready var chunk_manager : ChunkManager = ChunkManager.new(8)
 
 @export var brush_size : int = 1
 var Brush : int = 0
@@ -52,7 +53,8 @@ var elements = {
 	RIGHT_WATER: TileElement.new(RIGHT_WATER, handle_liquid_movement, LIQUID),
 	LEFT_WATER: TileElement.new(LEFT_WATER, handle_liquid_movement, LIQUID),
 	SNOW: TileElement.new(SNOW, handle_snow_movement, SOLID),
-	ICE: TileElement.new(ICE, handle_immovable, SOLID)
+	ICE: TileElement.new(ICE, handle_immovable, SOLID),
+	ROOF: TileElement.new(ROOF, handle_immovable, SOLID)
 }
 
 
@@ -403,5 +405,5 @@ func handle_empty(cell: Vector2, type: int) -> void:
 	return
 
 
-func _on_weather_drop_spot(DropPos: Vector2, type: int) -> void:
+func _on_weather_manager_dropper(DropPos: Vector2, type: int) -> void:
 	place_cell(DropPos, type)

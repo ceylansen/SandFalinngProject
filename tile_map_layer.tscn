@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://my0u1f2wned0"]
+[gd_scene load_steps=21 format=3 uid="uid://my0u1f2wned0"]
 
 [ext_resource type="Texture2D" uid="uid://cq824e8ecl03e" path="res://sprites/Sand.png" id="1_ecn4a"]
 [ext_resource type="Texture2D" uid="uid://bs438pbtgs7hf" path="res://sprites/Water.png" id="2_x7b15"]
+[ext_resource type="Texture2D" uid="uid://covc38q2rfwl7" path="res://sprites/roof.png" id="3_3vshl"]
 [ext_resource type="Texture2D" uid="uid://oog5m2p0oqav" path="res://sprites/Stone.png" id="3_nh1nf"]
 [ext_resource type="Texture2D" uid="uid://bymaemf67xttr" path="res://sprites/dirt.png" id="4_lpi1i"]
 [ext_resource type="Texture2D" uid="uid://c71wlehg7120y" path="res://sprites/darkdirt.png" id="5_gfg17"]
@@ -24,6 +25,13 @@ texture_region_size = Vector2i(1, 1)
 0:0/0/z_index = 1
 0:0/0/physics_layer_1/polygon_0/points = PackedVector2Array(-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5)
 0:0/0/custom_data_0 = 1
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2fxbb"]
+resource_name = "ROOF"
+texture = ExtResource("3_3vshl")
+texture_region_size = Vector2i(1, 1)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fgvpp"]
 resource_name = "Stone"
@@ -104,6 +112,7 @@ sources/6 = SubResource("TileSetAtlasSource_4l3lw")
 sources/7 = SubResource("TileSetAtlasSource_vvfpb")
 sources/8 = SubResource("TileSetAtlasSource_ei3nl")
 sources/9 = SubResource("TileSetAtlasSource_u60xx")
+sources/10 = SubResource("TileSetAtlasSource_2fxbb")
 
 [node name="TileMapLayer" type="TileMapLayer"]
 tile_set = SubResource("TileSet_65q84")

@@ -1,20 +1,32 @@
 extends Node2D
 
-@export var player: CharacterBody2D
-@export var current_camera: Camera2D
+@export var player : CharacterBody2D
+@export var current_camera : Camera2D
 @onready var cameras = get_children()
+
+var cam_numbers : Dictionary
+
+var curr_cam_number : int = 1
+var prev_cam_number : int = 1
+
+
+signal CurrPrevCamera(curr_cam_number : int, prev_cam_number : int)
 
 func _ready() -> void:
 	connect_cameras()
 	switch_to_camera(current_camera)
 
 func connect_cameras() -> void:
-	for camera in cameras:
-		if camera.has_signal("Switch"):
-			camera.Switch.connect(self.switch_to_camera.bind(camera))
+	for i in range(cameras.size()):
+		if cameras[i].has_signal("Switch"):
+			cam_numbers[cameras[i]] = i 
+			cameras[i].Switch.connect(self.switch_to_camera.bind(cameras[i]))
 
 func switch_to_camera(camera: Camera2D):
 	if camera == null or camera == current_camera:
 		return
+	prev_cam_number = cam_numbers[current_camera]
 	camera.make_current()
 	current_camera = camera
+	curr_cam_number = cam_numbers[camera]
+	emit_signal("CurrPrevCamera", curr_cam_number, prev_cam_number)

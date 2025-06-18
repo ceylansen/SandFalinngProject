@@ -19,3 +19,4 @@ autostart = true
 
 [connection signal="timeout" from="RainDropTimer" to="." method="_on_rain_drop_timer_timeout"]
 [connection signal="timeout" from="SnowTimer" to="." method="_on_snow_timer_timeout"]
+[connection signal="timeout" from="HeavyRain" to="." method="_on_heavy_rain_timeout"]

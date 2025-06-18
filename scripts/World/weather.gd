@@ -1,7 +1,6 @@
 extends Node2D
 
-@export var Raining : bool = false
-@export var Snowing : bool = false
+@export var CurrentWeather : int = 0
 @onready var DropPosY = global_position.y - 64
 
 
@@ -16,13 +15,11 @@ signal DropSpot(DropPos : Vector2, type : int)
 func _ready() -> void:
 
 	PointA = global_position.x - 64
-	print(PointA)
 	PointB = PointA + WeatherSize
-	print(PointB)
 
 #Spawns raindrops on raindroptimeout in a random location in weather area
 func _on_rain_drop_timer_timeout() -> void:
-	if Raining:
+	if CurrentWeather == 1:
 		var DropPosX = PointB - (randi() % WeatherSize)
 		var DropPos = Vector2(DropPosX, DropPosY)
 		emit_signal("DropSpot", DropPos, WATER)
@@ -30,7 +27,14 @@ func _on_rain_drop_timer_timeout() -> void:
 
 
 func _on_snow_timer_timeout() -> void:
-	if Snowing:
+	if CurrentWeather == 2:
 		var DropPosX = PointB - (randi() % WeatherSize)
 		var DropPos = Vector2(DropPosX, DropPosY)
 		emit_signal("DropSpot", DropPos, SNOW)
+
+
+func _on_heavy_rain_timeout() -> void:
+	if CurrentWeather == 3:
+		var DropPosX = PointB - (randi() % WeatherSize)
+		var DropPos = Vector2(DropPosX, DropPosY)
+		emit_signal("DropSpot", DropPos, WATER)
