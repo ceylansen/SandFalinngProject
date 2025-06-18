@@ -24,12 +24,10 @@ position = Vector2(128, 0)
 texture = ExtResource("3_lysqe")
 
 [node name="BackgroundRain" parent="." instance=ExtResource("3_5d7ay")]
-visible = false
 follow_viewport_enabled = false
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -1
-visible = false
 follow_viewport_enabled = true
 
 [node name="Control" type="Control" parent="Background"]
@@ -41,6 +39,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Background" type="Sprite2D" parent="Background/Control"]
+visible = false
 texture = ExtResource("2_0ig2j")
 
 [node name="CameraManager" type="Node2D" parent="." node_paths=PackedStringArray("player", "current_camera")]
