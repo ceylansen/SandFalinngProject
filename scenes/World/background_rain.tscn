@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://hm1qyenx62yk"]
+[gd_scene load_steps=6 format=3 uid="uid://hm1qyenx62yk"]
 
 [ext_resource type="Shader" path="res://scripts/shader/rain.gdshader" id="1_11bvs"]
 [ext_resource type="Script" path="res://scripts/World/background_rain.gd" id="1_wuh2y"]
 [ext_resource type="Texture2D" uid="uid://bw80ahj5m87rn" path="res://sprites/rain.png" id="2_2du1k"]
+[ext_resource type="PackedScene" uid="uid://caejlhomtsh" path="res://scenes/World/DayNightModulate.tscn" id="4_588hv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_esh1o"]
 shader = ExtResource("1_11bvs")
@@ -12,6 +13,15 @@ shader_parameter/speed = -0.68
 layer = -1
 follow_viewport_enabled = true
 script = ExtResource("1_wuh2y")
+
+[node name="DayTime" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.584314, 0.854902, 0.976471, 1)
 
 [node name="RainBackground" type="ColorRect" parent="."]
 visible = false
@@ -32,6 +42,15 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.785591, 0.8791, 0.998588, 1)
 
+[node name="NightTime" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0115657, 0.266605, 0.424163, 1)
+
 [node name="Pattern" type="TextureRect" parent="."]
 visible = false
 texture_repeat = 2
@@ -41,3 +60,5 @@ offset_bottom = 192.0
 scale = Vector2(4, 4)
 texture = ExtResource("2_2du1k")
 stretch_mode = 1
+
+[node name="CanvasModulate" parent="." instance=ExtResource("4_588hv")]

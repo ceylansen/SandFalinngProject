@@ -5,6 +5,6 @@
 	#Rain/Snow needs to melt/evaporate naturally when a non rainy or cold day has come
 
 #Day Night
-#Background change(snow, raining, night)
+#Background change(sn ow, raining, night)
 #Add firefly
 #Pickup pixel

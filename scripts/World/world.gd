@@ -26,7 +26,7 @@ const WATER_EVAP_CHANCE : int = 1
 var weather_type : int = 0
 
 
-@onready var chunk_manager : ChunkManager = ChunkManager.new(8)
+@onready var chunk_manager : ChunkManager = ChunkManager.new(12)
 
 @export var brush_size : int = 1
 var Brush : int = 0

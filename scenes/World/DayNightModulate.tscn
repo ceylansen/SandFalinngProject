@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://caejlhomtsh"]
+
+[ext_resource type="Script" path="res://scripts/shader/canvas_modulate.gd" id="1_30t2k"]
+
+[sub_resource type="Gradient" id="Gradient_fst1l"]
+offsets = PackedFloat32Array(0, 0.00609756, 1)
+colors = PackedColorArray(0.0117647, 0.266667, 0.423529, 1, 0.328769, 0.501904, 0.608448, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0ftd7"]
+gradient = SubResource("Gradient_fst1l")
+
+[node name="CanvasModulate" type="CanvasModulate"]
+script = ExtResource("1_30t2k")
+gradient = SubResource("GradientTexture1D_0ftd7")
+TimeSpeed = 0.5

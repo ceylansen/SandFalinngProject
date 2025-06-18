@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://f7ahrxd8u8s2"]
+[gd_scene load_steps=15 format=4 uid="uid://f7ahrxd8u8s2"]
 
 [ext_resource type="Script" path="res://scripts/World/world.gd" id="1_332vr"]
 [ext_resource type="Texture2D" uid="uid://cryuhrg6fu3kv" path="res://sprites/testtestbg.png" id="2_0ig2j"]
@@ -11,16 +11,24 @@
 [ext_resource type="Texture2D" uid="uid://b28irm80708ta" path="res://sprites/house.png" id="5_8vyl2"]
 [ext_resource type="Script" path="res://scripts/World/weather_manager.gd" id="7_doe6v"]
 [ext_resource type="PackedScene" uid="uid://c02ydc2ssvjfd" path="res://ui/ui_overlay.tscn" id="9_r4ka0"]
+[ext_resource type="Script" path="res://scripts/World/time_manager.gd" id="10_usutx"]
 [ext_resource type="PackedScene" uid="uid://ca38ei2il3xjr" path="res://scenes/World/weather.tscn" id="12_hmtjn"]
+[ext_resource type="PackedScene" uid="uid://caejlhomtsh" path="res://scenes/World/DayNightModulate.tscn" id="14_pnxij"]
 
 [node name="World" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_332vr")
+brush_size = 3
+debug = true
 
 [node name="Testscape" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(128, 0)
 texture = ExtResource("3_lysqe")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = -1
+follow_viewport_enabled = true
 
 [node name="BackgroundWeather" parent="." instance=ExtResource("3_5d7ay")]
 unique_name_in_owner = true
@@ -40,6 +48,8 @@ grow_vertical = 2
 
 [node name="Background" type="Sprite2D" parent="Background/Control"]
 texture = ExtResource("2_0ig2j")
+
+[node name="CanvasModulate" parent="Background" instance=ExtResource("14_pnxij")]
 
 [node name="UIOverlay" parent="." instance=ExtResource("9_r4ka0")]
 
@@ -67,6 +77,7 @@ position = Vector2(256, 0)
 
 [node name="WeatherManager" type="Node2D" parent="."]
 script = ExtResource("7_doe6v")
+Weather = 1
 
 [node name="Weather1" parent="WeatherManager" instance=ExtResource("12_hmtjn")]
 position = Vector2(128, 0)
@@ -84,6 +95,7 @@ position = Vector2(-256, 0)
 position = Vector2(256, 0)
 
 [node name="TimeManager" type="Node2D" parent="."]
+script = ExtResource("10_usutx")
 
 [node name="House" type="Sprite2D" parent="."]
 position = Vector2(176, 0)
@@ -98,6 +110,8 @@ position = Vector2(31, 36)
 
 [node name="SnowMeltTimer" type="Timer" parent="."]
 autostart = true
+
+[node name="DayNightModulate" parent="." instance=ExtResource("14_pnxij")]
 
 [connection signal="CurrPrevCamera" from="CameraManager" to="WeatherManager" method="_on_camera_manager_curr_prev_camera"]
 [connection signal="Dropper" from="WeatherManager" to="." method="_on_weather_manager_dropper"]
