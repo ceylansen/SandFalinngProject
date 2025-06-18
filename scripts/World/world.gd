@@ -120,6 +120,7 @@ func _draw() -> void:
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	#pass
 
 func _process(_delta: float) -> void:
 	moved_cells.clear()
