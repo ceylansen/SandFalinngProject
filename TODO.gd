@@ -14,5 +14,6 @@
 #Pickup pixel (((important mechanic))) Not sure wether to go with mouse usage or just player position and keyboard.
 	#Probably hard to pickup specific stuff from just the character position and keyboard. + some mouse stuff already exsists.
 	# Would need to have some kind of max reach aswell tho for picking stuff up.
+		#Ok probably just mouse, but pixel highlight is kinda off sometimes for some reason
 
 #Add firefly

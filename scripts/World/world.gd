@@ -28,6 +28,7 @@ const ATLAS_COORDS : Vector2i = Vector2i(0, 0)
 
 const WATER_EVAP_CHANCE : int = 1
 var weather_type : int = 0
+var highlighted_cell : Vector2i = Vector2i.ZERO
 
 
 @onready var chunk_manager : ChunkManager = ChunkManager.new(12)
@@ -53,7 +54,7 @@ var elements = {
 	STONE: TileElement.new(STONE, handle_immovable, SOLID),
 	DIRT: TileElement.new(DIRT, handle_solid_movement, SOLID),
 	DARK_DIRT: TileElement.new(DARK_DIRT, handle_solid_movement, SOLID),
-	GRASS: TileElement.new(DARK_DIRT, handle_immovable, SOLID),
+	GRASS: TileElement.new(DARK_DIRT, handle_odd_solid, SOLID),
 	RIGHT_WATER: TileElement.new(RIGHT_WATER, handle_liquid_movement, LIQUID),
 	LEFT_WATER: TileElement.new(LEFT_WATER, handle_liquid_movement, LIQUID),
 	SNOW: TileElement.new(SNOW, handle_snow_movement, SOLID),
@@ -124,19 +125,21 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	moved_cells.clear()
-	if Input.is_action_just_pressed("1"):
-		Brush = SAND
-	elif Input.is_action_just_pressed("2"):
-		Brush = WATER
-	elif Input.is_action_just_pressed("3"):
-		Brush = STONE
-	elif Input.is_action_just_pressed("4"):
-		Brush = DIRT
-	elif Input.is_action_just_pressed("5"):
-		Brush = FALLING_SNOW
-	elif Input.is_action_just_pressed("erase"):
-		Brush = EMPTY
+	#if Input.is_action_just_pressed("1"):
+		#Brush = SAND
+	#elif Input.is_action_just_pressed("2"):
+		#Brush = WATER
+	#elif Input.is_action_just_pressed("3"):
+		#Brush = STONE
+	#elif Input.is_action_just_pressed("4"):
+		#Brush = DIRT
+	#elif Input.is_action_just_pressed("5"):
+		#Brush = FALLING_SNOW
+	#elif Input.is_action_just_pressed("erase"):
+		#Brush = EMPTY
 	
+	highlighted_cell = sim.local_to_map(Vector2i(get_global_mouse_position().x, get_global_mouse_position().y))
+
 	if Input.is_action_pressed("RightMouse"):
 		pickup_check()
 		#for x in range(-brush_size, brush_size + 1):
@@ -418,13 +421,26 @@ func handle_snow_movement(cell: Vector2i, type: int) -> void:
 			return
 
 
-func handle_immovable(cell: Vector2, type: int) -> void:
+func handle_immovable(cell: Vector2i, type: int) -> void:
+	return
+
+func handle_empty(cell: Vector2i, type: int) -> void:
 	return
 
 
-func handle_empty(cell: Vector2, type: int) -> void:
-	return
+func handle_odd_solid(cell: Vector2i, type : int):
+	var current_chunk = chunk_manager.get_or_create_chunk(cell)
+	if not current_chunk.is_chunk_awake():
+		return
+	
+	if moved_cells.has(cell):
+		return
 
+	var below_cell = cell + Vector2i(0, 1)
+	var below_cell_id = sim.get_cell_source_id(below_cell)
+	if below_cell_id == EMPTY:
+		move_cell(cell, type, below_cell)
+		return
 
 func _on_weather_manager_dropper(DropPos: Vector2, type: int) -> void:
 	place_cell(DropPos, type)
@@ -447,17 +463,30 @@ func _on_snow_melt_timer_timeout() -> void:
 				place_cell(snow[snow_to_melt], EMPTY)
 
 func pickup_check() -> void:
-	var cell = sim.local_to_map(Vector2i(get_global_mouse_position().x, get_global_mouse_position().y))
+	#var cell = sim.local_to_map(Vector2i(get_global_mouse_position().x, get_global_mouse_position().y))
+	var cell = highlighted_cell
 	var type = sim.get_cell_source_id(cell)
 	var above_cell = cell + Vector2i(0, -1)
 	var above_cell_id = sim.get_cell_source_id(above_cell)
 	if above_cell_id == EMPTY:
 		Player.pocket_pickup(cell, type)
 		return
+	var left_cell = cell + Vector2i(-1, 0)
+	var right_cell = cell + Vector2i(1, 0)
+	var left_cell_id = sim.get_cell_source_id(left_cell)
+	var right_cell_id = sim.get_cell_source_id(right_cell)
+	
+	if left_cell_id == EMPTY:
+		Player.pocket_pickup(cell, type)
+		return
+	elif right_cell_id == EMPTY:
+		Player.pocket_pickup(cell, type)
+		return
 		
 
 func eject_check() -> void:
-	var cell = sim.local_to_map(Vector2i(get_global_mouse_position().x, get_global_mouse_position().y))
+	#var cell = sim.local_to_map(Vector2i(get_global_mouse_position().x, get_global_mouse_position().y))
+	var cell = highlighted_cell
 	var cell_id = sim.get_cell_source_id(cell)
 	var above_cell = cell + Vector2i(0, -1)
 	var above_cell_id = sim.get_cell_source_id(above_cell)
@@ -466,7 +495,7 @@ func eject_check() -> void:
 			Player.eject_pixel(cell)
 			return
 		else:
-			Player.eject_pixel(above_cell)
+			#Player.eject_pixel(above_cell)
 			return
 	var left_cell = cell + Vector2i(-1, 0)
 	var right_cell = cell + Vector2i(1, 0)
@@ -474,7 +503,10 @@ func eject_check() -> void:
 	var right_cell_id = sim.get_cell_source_id(right_cell)
 	
 	if left_cell_id == EMPTY:
-		Player.eject_pixel(cell)
+		Player.eject_pixel(left_cell)
+		return
+	elif right_cell_id == EMPTY:
+		Player.eject_pixel(left_cell)
 		return
 
 func _on_player_picked_up(cell: Vector2, type: int) -> void:
