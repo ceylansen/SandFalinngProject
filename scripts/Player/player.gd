@@ -17,6 +17,7 @@ var submerged : bool = false
 var water_top : bool = false
 var water_bottom : bool = false
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+@onready var costume : AnimatedSprite2D = $Hat
 
 signal picked_up(cell : Vector2, type : int)
 signal ejected(cell : Vector2, type : int)
@@ -34,11 +35,11 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 	var direction := Input.get_axis("left", "right")
 	if direction == -1:
-		$AnimatedSprite2D.flip_h = true
+		costume.flip_h = true
 	elif direction == 1:
-		$AnimatedSprite2D.flip_h = false
+		costume.flip_h = false
 	if direction:
-		$AnimatedSprite2D.play("walk")
+		costume.play("walk")
 		if stair_step:
 			#position += Vector2(direction, -1)
 			if not stepped and not too_high:
@@ -49,10 +50,10 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity.x = direction * SPEED
 	else:
-		$AnimatedSprite2D.play("idle")
+		costume.play("idle")
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	if Input.is_action_pressed("down"):
-		$AnimatedSprite2D.play("down")
+		costume.play("down")
 		velocity.x = 0
 	move_and_slide()
 

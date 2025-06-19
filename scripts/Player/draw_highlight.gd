@@ -10,12 +10,16 @@ func _draw():
 		return
 	#var sim = main.sim
 	var cell = main.highlighted_cell
+	var player = main.Player
 	#var cell = sim.local_to_map(get_global_mouse_position())
 	#var cell_pos = sim.map_to_local(cell)
 	#print(cell)
 	#print(cell_pos)
 	#var tile_size = sim.tile_set.tile_size if sim.tile_set else Vector2(1, 1)
-	draw_rect(Rect2((cell), Vector2(1, 1)), Color(1, 0, 0, 0.75))
+	if player.global_position.distance_to(cell) < 20:
+		draw_rect(Rect2((cell), Vector2(1, 1)), Color(0, 1, 0, 0.75))
+	else:
+		draw_rect(Rect2((cell), Vector2(1, 1)), Color(1, 0, 0, 0.75))
 	#var mouse_pos = get_global_mouse_position()
 	#var cell = sim.local_to_map(mouse_pos)
 	#var cell_world_pos = sim.map_to_local(cell)

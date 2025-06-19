@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dcjyvd7pggp7n"]
+[gd_scene load_steps=20 format=3 uid="uid://dcjyvd7pggp7n"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_cbd42"]
 [ext_resource type="Texture2D" uid="uid://cjrgj76vqwsug" path="res://sprites/mainguy.png" id="2_fbyfq"]
@@ -37,7 +37,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 4.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -45,6 +45,52 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5x2pl")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jbjlg"]
+atlas = ExtResource("2_fbyfq")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lkryg"]
+atlas = ExtResource("2_fbyfq")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dighd"]
+atlas = ExtResource("2_fbyfq")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wde3n"]
+atlas = ExtResource("2_fbyfq")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gfh0h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jbjlg")
+}],
+"loop": true,
+"name": &"down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lkryg")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dighd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wde3n")
 }],
 "loop": true,
 "name": &"walk",
@@ -70,10 +116,15 @@ size = Vector2(3, 2)
 collision_layer = 2
 script = ExtResource("1_cbd42")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Hat" type="AnimatedSprite2D" parent="."]
 visibility_layer = 2
 z_as_relative = false
 sprite_frames = SubResource("SpriteFrames_fgp21")
+animation = &"idle"
+
+[node name="NoHat" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = SubResource("SpriteFrames_gfh0h")
 animation = &"down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
