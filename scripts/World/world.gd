@@ -452,7 +452,7 @@ func _on_weather_manager_weather_type(Weather: int) -> void:
 
 
 func _on_snow_melt_timer_timeout() -> void:
-	if weather_type != 2:
+	if weather_type % 2 != 0:
 		var snow = sim.get_used_cells_by_id(SNOW, ATLAS_COORDS)
 		if snow.size() != 0:
 			var snow_to_melt = randi() % snow.size()

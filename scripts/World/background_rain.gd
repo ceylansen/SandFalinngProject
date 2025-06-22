@@ -22,6 +22,7 @@ func ChangeBackground(background : int) -> void:
 		1: next_bg = $RainBackground
 		2: next_bg = $SnowBackground
 		3: next_bg = $RainBackground
+		4: next_bg = $SnowBackground
 		0: next_bg = $DayTime
 		-1: next_bg = $NightTime
 

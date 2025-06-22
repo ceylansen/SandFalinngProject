@@ -15,5 +15,24 @@
 	#Probably hard to pickup specific stuff from just the character position and keyboard. + some mouse stuff already exsists.
 	# Would need to have some kind of max reach aswell tho for picking stuff up.
 		#Ok probably just mouse, but pixel highlight is kinda off sometimes for some reason
+		#off obviously fixed by just taking the same variable.
 
-#Add firefly
+
+#Add day counter and timer for weather changes
+
+#Make house inside
+
+#Add area more to the right.
+
+# Plants huh, not sure how to go about this yet in this implementation of a falling sand sim cause pixels 
+# don't contain any data other than their own type. 
+	#Maybe couple different types of plant tiles as in: Seed, start pixel from plant, stem pixels (rng amount of length ig)
+	#, flower head/whatever plant
+	# Seed needs water to turn into starting plant
+	# Mabe also in soil, for certain stuff
+	
+
+#Add firefly lol
+#
+
+# Change howpickup pixel looks ig animation from player, line from player indication..

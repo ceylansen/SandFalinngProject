@@ -79,7 +79,6 @@ position = Vector2(256, 0)
 
 [node name="WeatherManager" type="Node2D" parent="."]
 script = ExtResource("7_doe6v")
-Weather = 2
 
 [node name="Weather1" parent="WeatherManager" instance=ExtResource("12_hmtjn")]
 position = Vector2(128, 0)
