@@ -4,6 +4,7 @@ extends Node2D
 
 @onready var weathers = get_children()
 @export var Weather : int
+@export var weather_amnt = 5
 
 signal Dropper(DropPos : Vector2, type : int)
 signal weather_type(Weather : int)
@@ -25,7 +26,9 @@ func decide_weather(Weather : int):
 		weather.CurrentWeather = Weather
 
 
+
 func _on_camera_manager_curr_prev_camera(curr_cam_number: int, prev_cam_number: int) -> void:
+	print(Weather)
 	for weather in weathers:
 		weather.CurrentWeather = 0
 	if curr_cam_number == prev_cam_number:
@@ -34,3 +37,16 @@ func _on_camera_manager_curr_prev_camera(curr_cam_number: int, prev_cam_number: 
 		weathers[curr_cam_number].CurrentWeather = Weather
 		if Weather == 2:
 			weathers[prev_cam_number].CurrentWeather = Weather
+
+
+func _on_time_manager_new_day(Day: int) -> void:
+	var weather_chance = randi() % 10
+	if Day % 2 == 1:
+		if weather_chance < 10:
+			Weather = randi() % weather_amnt
+			emit_signal("weather_type", Weather)
+	else:
+		if weather_chance < 10:
+			Weather = randi() % weather_amnt
+			emit_signal("weather_type", Weather)
+			

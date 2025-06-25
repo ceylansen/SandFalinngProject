@@ -171,6 +171,7 @@ shape = SubResource("RectangleShape2D_frgvp")
 [node name="Pocket" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_2nyok")
+MAX_CAPACITY = 100
 
 [connection signal="body_entered" from="SingleStep" to="." method="_on_single_step_body_entered"]
 [connection signal="body_exited" from="SingleStep" to="." method="_on_single_step_body_exited"]

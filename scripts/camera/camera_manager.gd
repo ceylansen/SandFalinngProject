@@ -30,3 +30,8 @@ func switch_to_camera(camera: Camera2D):
 	current_camera = camera
 	curr_cam_number = cam_numbers[camera]
 	emit_signal("CurrPrevCamera", curr_cam_number, prev_cam_number)
+
+
+func _on_time_manager_new_day(Day: int) -> void:
+	print(curr_cam_number, prev_cam_number)
+	emit_signal("CurrPrevCamera", curr_cam_number, prev_cam_number)

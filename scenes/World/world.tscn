@@ -97,6 +97,7 @@ position = Vector2(256, 0)
 
 [node name="TimeManager" type="Node2D" parent="."]
 script = ExtResource("10_usutx")
+TimeSpeed = 2.0
 
 [node name="House" type="Sprite2D" parent="."]
 position = Vector2(176, 0)
@@ -122,6 +123,8 @@ script = ExtResource("15_s4x6n")
 [connection signal="CurrPrevCamera" from="CameraManager" to="WeatherManager" method="_on_camera_manager_curr_prev_camera"]
 [connection signal="Dropper" from="WeatherManager" to="." method="_on_weather_manager_dropper"]
 [connection signal="weather_type" from="WeatherManager" to="." method="_on_weather_manager_weather_type"]
+[connection signal="NewDay" from="TimeManager" to="CameraManager" method="_on_time_manager_new_day"]
+[connection signal="NewDay" from="TimeManager" to="WeatherManager" method="_on_time_manager_new_day"]
 [connection signal="ejected" from="Player" to="." method="_on_player_ejected"]
 [connection signal="picked_up" from="Player" to="." method="_on_player_picked_up"]
 [connection signal="timeout" from="SnowMeltTimer" to="." method="_on_snow_melt_timer_timeout"]
