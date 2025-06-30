@@ -10,7 +10,7 @@ func _ready() -> void:
 			bgs.append(child)
 
 func ChangeBackground(background : int) -> void:
-	
+	print(background)
 	var current_bg: ColorRect = null
 	for bg in bgs:
 		if bg.visible:
@@ -24,9 +24,8 @@ func ChangeBackground(background : int) -> void:
 		3: next_bg = $RainBackground
 		4: next_bg = $SnowBackground
 		0: next_bg = $DayTime
-		-1: next_bg = $NightTime
 
-	if typeof(next_bg) == TYPE_OBJECT and next_bg != current_bg:
+	if next_bg != current_bg:
 		if current_bg:
 			smooth_fade(current_bg, next_bg)
 		else:

@@ -7,13 +7,12 @@ extends Node2D
 var WeatherSize = 128
 var PointA
 var PointB
-const WATER = 1
-const FALLING_SNOW = 13
+const WATER := 1
+const FALLING_SNOW := 13
 
 signal DropSpot(DropPos : Vector2, type : int)
 
 func _ready() -> void:
-
 	PointA = global_position.x - 64
 	PointB = PointA + WeatherSize
 

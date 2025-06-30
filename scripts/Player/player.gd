@@ -93,13 +93,11 @@ func _on_too_high_step_body_exited(body: Node2D) -> void:
 func _on_water_top_body_entered(body: Node2D) -> void:
 	if body is TileMapLayer:
 		if water_tile_check(body):
-			print("entered")
 			submerged = true
 
 func _on_water_top_body_exited(body: Node2D) -> void:
 	if body is TileMapLayer:
 		if water_tile_check(body):
-			print("exited")
 			submerged = false
 
 func water_tile_check(body: TileMapLayer) -> bool:
@@ -120,9 +118,9 @@ func pocket_pickup(cell : Vector2, type : int) -> void:
 		return
 	if global_position.distance_to(cell) < 20:
 		if %Pocket.AddPixel(type):
-			emit_signal("picked_up", cell, type)
+			picked_up.emit(cell, type)
 
 func eject_pixel(cell : Vector2) -> void:
 	if global_position.distance_to(cell) < 20:
 		var type : int = %Pocket.EjectTopPixel()
-		emit_signal("ejected", cell, type)
+		ejected.emit(cell, type)

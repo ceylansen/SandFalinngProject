@@ -15,7 +15,6 @@ follow_viewport_enabled = true
 script = ExtResource("1_wuh2y")
 
 [node name="DayTime" type="ColorRect" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

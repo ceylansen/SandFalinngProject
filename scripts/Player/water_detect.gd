@@ -9,10 +9,10 @@ func _on_body_entered(body: Node2D) -> void:
 		var overlapping = get_overlapping_bodies()
 		if (overlapping.size() >= 1):
 			is_in_water = true
-			emit_signal("water_state", true)
+			water_state.emit(true)
 
 func _on_body_exited(body: Node2D) -> void:
 	var overlapping = get_overlapping_bodies()
 	if (overlapping.size() == 0):
 		is_in_water = false
-		emit_signal("water_state", false)
+		water_state.emit(false)

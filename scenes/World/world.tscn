@@ -81,7 +81,6 @@ script = ExtResource("7_doe6v")
 
 [node name="Weather1" parent="WeatherManager" instance=ExtResource("12_hmtjn")]
 position = Vector2(128, 0)
-CurrentWeather = 1
 
 [node name="Weather2" parent="WeatherManager" instance=ExtResource("12_hmtjn")]
 
@@ -119,9 +118,10 @@ visible = false
 script = ExtResource("15_s4x6n")
 
 [connection signal="CurrPrevCamera" from="CameraManager" to="WeatherManager" method="_on_camera_manager_curr_prev_camera"]
+[connection signal="WeatherChange" from="CameraManager" to="WeatherManager" method="_on_camera_manager_weather_change"]
+[connection signal="CameraNewDay" from="WeatherManager" to="CameraManager" method="_on_weather_manager_camera_new_day"]
 [connection signal="Dropper" from="WeatherManager" to="." method="_on_weather_manager_dropper"]
 [connection signal="weather_type" from="WeatherManager" to="." method="_on_weather_manager_weather_type"]
-[connection signal="NewDay" from="TimeManager" to="CameraManager" method="_on_time_manager_new_day"]
 [connection signal="NewDay" from="TimeManager" to="WeatherManager" method="_on_time_manager_new_day"]
 [connection signal="ejected" from="Player" to="." method="_on_player_ejected"]
 [connection signal="picked_up" from="Player" to="." method="_on_player_picked_up"]

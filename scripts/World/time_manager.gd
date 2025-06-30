@@ -14,8 +14,6 @@ func _process(_delta: float) -> void:
 	if CurrentTime >= DayLength:
 		CurrentDay += 1
 		CurrentTime = StartingTime
-		#emit_signal("NewDay", CurrentDay)
-		print(CurrentDay)
 		NewDay.emit(CurrentDay)
 	queue_redraw()
 
