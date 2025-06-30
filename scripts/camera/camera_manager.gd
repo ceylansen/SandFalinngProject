@@ -14,24 +14,27 @@ signal CurrPrevCamera(curr_cam_number : int, prev_cam_number : int)
 
 func _ready() -> void:
 	connect_cameras()
+	print(current_camera)
 	switch_to_camera(current_camera)
 
 func connect_cameras() -> void:
 	for i in range(cameras.size()):
 		if cameras[i].has_signal("Switch"):
-			cam_numbers[cameras[i]] = i 
+			cam_numbers[cameras[i]] = i
+			print(cam_numbers)
 			cameras[i].Switch.connect(self.switch_to_camera.bind(cameras[i]))
 
 func switch_to_camera(camera: Camera2D):
-	if camera == null or camera == current_camera:
+	print(camera)
+	if camera == null:
 		return
 	prev_cam_number = cam_numbers[current_camera]
 	camera.make_current()
 	current_camera = camera
 	curr_cam_number = cam_numbers[camera]
-	emit_signal("CurrPrevCamera", curr_cam_number, prev_cam_number)
+	#CurrPrevCamera.emit(curr_cam_number, prev_cam_number)
 
 
 func _on_time_manager_new_day(Day: int) -> void:
 	print(curr_cam_number, prev_cam_number)
-	emit_signal("CurrPrevCamera", curr_cam_number, prev_cam_number)
+	CurrPrevCamera.emit(curr_cam_number, prev_cam_number)

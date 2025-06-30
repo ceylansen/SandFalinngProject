@@ -55,10 +55,9 @@ visible = false
 [node name="UIOverlay" parent="." instance=ExtResource("9_r4ka0")]
 
 [node name="CameraManager" type="Node2D" parent="." node_paths=PackedStringArray("player", "current_camera")]
-visible = false
 script = ExtResource("2_hbbtf")
 player = NodePath("../Player")
-current_camera = NodePath("Camera1")
+current_camera = NodePath("Camera2")
 
 [node name="Camera1" parent="CameraManager" instance=ExtResource("2_cll8l")]
 position = Vector2(128, 0)
@@ -97,7 +96,6 @@ position = Vector2(256, 0)
 
 [node name="TimeManager" type="Node2D" parent="."]
 script = ExtResource("10_usutx")
-TimeSpeed = 2.0
 
 [node name="House" type="Sprite2D" parent="."]
 position = Vector2(176, 0)

@@ -29,6 +29,7 @@ func decide_weather(Weather : int):
 
 func _on_camera_manager_curr_prev_camera(curr_cam_number: int, prev_cam_number: int) -> void:
 	print(Weather)
+	print("HEY")
 	for weather in weathers:
 		weather.CurrentWeather = 0
 	if curr_cam_number == prev_cam_number:
@@ -44,9 +45,11 @@ func _on_time_manager_new_day(Day: int) -> void:
 	if Day % 2 == 1:
 		if weather_chance < 10:
 			Weather = randi() % weather_amnt
-			emit_signal("weather_type", Weather)
+			#emit_signal("weather_type", Weather)
+			weather_type.emit(Weather)
 	else:
 		if weather_chance < 10:
 			Weather = randi() % weather_amnt
-			emit_signal("weather_type", Weather)
+			#emit_signal("weather_type", Weather)
+			weather_type.emit(Weather)
 			

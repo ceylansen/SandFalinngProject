@@ -5,16 +5,18 @@ extends Node2D
 @export var CurrentDay := 0
 @export var DayLength := 1000
 
-@export var TimeSpeed := 1.0
+@export var TimeSpeed := 5.0
 
 signal NewDay(Day : int)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	CurrentTime += 1.0 * TimeSpeed
-	if CurrentTime == DayLength:
+	if CurrentTime >= DayLength:
 		CurrentDay += 1
 		CurrentTime = StartingTime
-		emit_signal("NewDay", CurrentDay)
+		#emit_signal("NewDay", CurrentDay)
+		print(CurrentDay)
+		NewDay.emit(CurrentDay)
 	queue_redraw()
 
 

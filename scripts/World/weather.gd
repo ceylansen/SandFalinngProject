@@ -22,26 +22,25 @@ func _on_rain_drop_timer_timeout() -> void:
 	if CurrentWeather == 1:
 		var DropPosX = PointB - (randi() % WeatherSize)
 		var DropPos = Vector2(DropPosX, DropPosY)
-		emit_signal("DropSpot", DropPos, WATER)
-		
+		DropSpot.emit(DropPos, WATER)
 
 
 func _on_snow_timer_timeout() -> void:
 	if CurrentWeather == 2:
 		var DropPosX = PointB - (randi() % WeatherSize)
 		var DropPos = Vector2(DropPosX, DropPosY)
-		emit_signal("DropSpot", DropPos, FALLING_SNOW)
+		DropSpot.emit(DropPos, FALLING_SNOW)
 
 
 func _on_heavy_rain_timeout() -> void:
 	if CurrentWeather == 3:
 		var DropPosX = PointB - (randi() % WeatherSize)
 		var DropPos = Vector2(DropPosX, DropPosY)
-		emit_signal("DropSpot", DropPos, WATER)
+		DropSpot.emit(DropPos, WATER)
 
 
 func _on_heavy_snow_timeout() -> void:
 	if CurrentWeather == 4:
 		var DropPosX = PointB - (randi() % WeatherSize)
 		var DropPos = Vector2(DropPosX, DropPosY)
-		emit_signal("DropSpot", DropPos, FALLING_SNOW)
+		DropSpot.emit(DropPos, FALLING_SNOW)

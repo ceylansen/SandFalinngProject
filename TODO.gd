@@ -36,3 +36,16 @@
 #
 
 # Change howpickup pixel looks ig animation from player, line from player indication..
+
+
+# Change background also on weather, slight fade (white filter rect whatever)
+
+# Long arm to grab pixel maybe lol
+
+#Inventory 
+
+#Stickerbook, cool ways to collect stickers
+
+#Left side penguin on ice 
+
+#Pouch in which you can see the pixels in the top left inventory thingy maybe
