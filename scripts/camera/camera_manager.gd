@@ -1,5 +1,7 @@
 extends Node2D
 
+
+#When adding new cameras dont forget to also add new weathers
 @export var player : CharacterBody2D
 @export var current_camera : Camera2D
 @onready var cameras = get_children()

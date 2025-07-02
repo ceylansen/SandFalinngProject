@@ -34,6 +34,8 @@ func ChangeBackground(background : int) -> void:
 			get_tree().create_tween().tween_property(next_bg, "modulate:a", 1.0, tween_time)
 
 func smooth_fade(from_bg: ColorRect, to_bg: ColorRect) -> void:
+	if to_bg == null:
+		return
 	var tween = get_tree().create_tween()
 	tween.tween_property(from_bg, "modulate:a", 0.0, tween_time)
 	to_bg.modulate.a = 0.0
