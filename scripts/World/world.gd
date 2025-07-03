@@ -462,13 +462,15 @@ func _on_snow_melt_timer_timeout() -> void:
 			else:
 				place_cell(snow[snow_to_melt], EMPTY)
 
+#Check to see if the cell is pickupable, i.e. does it have solid objects around it or not
 func pickup_check() -> void:
 	#var cell = sim.local_to_map(Vector2i(get_global_mouse_position().x, get_global_mouse_position().y))
 	var cell = highlighted_cell
 	var type = sim.get_cell_source_id(cell)
 	var above_cell = cell + Vector2i(0, -1)
 	var above_cell_id = sim.get_cell_source_id(above_cell)
-	if above_cell_id == EMPTY:
+	var above_element = elements.get(above_cell_id, null)
+	if above_element.basetype != SOLID:
 		Player.pocket_pickup(cell, type)
 		return
 	var left_cell = cell + Vector2i(-1, 0)
@@ -476,10 +478,12 @@ func pickup_check() -> void:
 	var left_cell_id = sim.get_cell_source_id(left_cell)
 	var right_cell_id = sim.get_cell_source_id(right_cell)
 	
-	if left_cell_id == EMPTY:
+	var right_element = elements.get(right_cell_id, null)
+	var left_element = elements.get(left_cell_id, null)
+	if left_element.basetype != SOLID:
 		Player.pocket_pickup(cell, type)
 		return
-	elif right_cell_id == EMPTY:
+	elif right_element.basetype != SOLID:
 		Player.pocket_pickup(cell, type)
 		return
 		
@@ -490,8 +494,10 @@ func eject_check() -> void:
 	var cell_id = sim.get_cell_source_id(cell)
 	var above_cell = cell + Vector2i(0, -1)
 	var above_cell_id = sim.get_cell_source_id(above_cell)
-	if above_cell_id == EMPTY:
-		if cell_id == EMPTY:
+	var above_element = elements.get(above_cell_id, null)
+	var cell_element = elements.get(cell_id, null)
+	if above_element.basetype != SOLID:
+		if cell_element.basetype != SOLID:
 			Player.eject_pixel(cell)
 			return
 		else:
@@ -502,11 +508,13 @@ func eject_check() -> void:
 	var left_cell_id = sim.get_cell_source_id(left_cell)
 	var right_cell_id = sim.get_cell_source_id(right_cell)
 	
-	if left_cell_id == EMPTY:
-		Player.eject_pixel(left_cell)
+	var right_element = elements.get(right_cell_id, null)
+	var left_element = elements.get(left_cell_id, null)
+	if left_element.basetype != SOLID:
+		Player.eject_pixel(cell)
 		return
-	elif right_cell_id == EMPTY:
-		Player.eject_pixel(left_cell)
+	elif right_element.basetype != SOLID:
+		Player.eject_pixel(cell)
 		return
 
 func _on_player_picked_up(cell: Vector2, type: int) -> void:
