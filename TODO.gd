@@ -49,3 +49,6 @@
 #Left side penguin on ice 
 
 #Pouch in which you can see the pixels in the top left inventory thingy maybe
+
+
+#PackedVector2Array maybe for speed
