@@ -1,1 +1,3 @@
-WIP Player interactive falling sand simulator within Godot.
+WIP 
+
+Player controlled character in 2D falling sand simulated world within Godot.
